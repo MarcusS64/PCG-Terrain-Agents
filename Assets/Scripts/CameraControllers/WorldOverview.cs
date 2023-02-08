@@ -12,7 +12,7 @@ public class WorldOverview : MonoBehaviour
     {
         CameraSwitcher.Register(freeLook);
         CameraSwitcher.Register(overview);
-        //CameraSwitcher.SwitchCamera(freeLook);
+        CameraSwitcher.SwitchCamera(freeLook);
     }
 
     private void OnDisable()
