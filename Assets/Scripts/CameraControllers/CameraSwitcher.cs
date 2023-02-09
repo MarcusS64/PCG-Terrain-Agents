@@ -11,7 +11,7 @@ static class CameraSwitcher
 
     public static bool IsActiveCamera(CinemachineVirtualCamera camera)
     {
-        Debug.Log(camera == ActiveCamera);
+        //Debug.Log(camera == ActiveCamera);
         return camera == ActiveCamera;
     }
 

@@ -11,7 +11,7 @@ public class FreeLookCameraSystem : MonoBehaviour
     [SerializeField] private float targetFieldOfViewMin = 10;
     [SerializeField] private float targetFieldOfViewMax = 50;
     [SerializeField] private float followOffsetMin = 5f;
-    [SerializeField] private float followOffsetMax = 50f;
+    [SerializeField] private float followOffsetMax = 90f;
     private bool dragPanMoveActite;
     private Vector2 lastMousePosition;
     private float targetFieldOfView = 50;
@@ -25,20 +25,23 @@ public class FreeLookCameraSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        HandleCameraMovement();
-        if (useEdgeScrolling)
+        if(camera.Priority > 0)
         {
-            HandleCameraMovementEdgeScrolling();
-        }
-        if (useDragPan)
-        {
-            HandleCameraMovementDragPan();
-        }
-        HandleCameraRotation();
+            HandleCameraMovement();
+            if (useEdgeScrolling)
+            {
+                HandleCameraMovementEdgeScrolling();
+            }
+            if (useDragPan)
+            {
+                HandleCameraMovementDragPan();
+            }
+            HandleCameraRotation();
 
-        //HandleCameraZoomFOV();
-        //HandleCameraZoomMove();
+            //HandleCameraZoomFOV();
+            HandleCameraZoomMove();
+        }
+
     }
 
     private void HandleCameraMovement()
