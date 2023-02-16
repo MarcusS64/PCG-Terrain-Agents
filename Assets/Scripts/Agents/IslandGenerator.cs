@@ -24,24 +24,31 @@ public class IslandGenerator : MonoBehaviour
     //[SerializeField] CoastalAgent CoastalAgent;
     private void Start()
     {
-        //squares = new Node[width, height];
-        //for (int i = 0; i < width; i++)
-        //{
-        //    for (int j = 0; j < height; j++)
-        //    {
-        //       squares[i, j] = new Node(i, j);
-        //    }
-        //}
-        //ConnectSquares(width, height, true);
-        //ConnectSquares(width, height, false);
-        //agent = new Agent();
-        //var nodes = GetRandomNode(squares[startX, startY]);
-        //squares[startX, startY].visited = true;
-        //squares[startX, startY].SetHeight(0.5f, "start");
-        //agent.SetProperties(startTokens, squares[startX, startY], nodes.Item1, nodes.Item2);
+        //StartTerrainGeneration();
+    }
 
-        //Terrain terrain = GetComponent<Terrain>();
-        //terrain.terrainData = GenerateTerrain(terrain.terrainData);
+    public void StartTerrainGeneration()
+    {
+        //Generate Graph map
+        squares = new Node[width, height];
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                squares[i, j] = new Node(i, j);
+            }
+        }
+        ConnectSquares(width, height, true);
+        ConnectSquares(width, height, false);
+
+        agent = new Agent();
+        var nodes = GetRandomNode(squares[startX, startY]);
+        squares[startX, startY].visited = true;
+        squares[startX, startY].SetHeight(0.5f, "start");
+        agent.SetProperties(startTokens, squares[startX, startY], nodes.Item1, nodes.Item2);
+
+        Terrain terrain = GetComponent<Terrain>();
+        terrain.terrainData = GenerateTerrain(terrain.terrainData);
     }
 
     private void Update() //Update for testing purposes, should be in Start
@@ -126,7 +133,7 @@ public class IslandGenerator : MonoBehaviour
         }
     }
 
-    private void SmoothCoast()
+    public void SmoothCoast()
     {
         for (int i = 0; i < width; i++)
         {
@@ -163,7 +170,7 @@ public class IslandGenerator : MonoBehaviour
         }
     }
 
-    private void RaiseMountains()
+    public void RaiseMountains()
     {
         int k = 0;
         for (int i = 0; i < width; i++)
