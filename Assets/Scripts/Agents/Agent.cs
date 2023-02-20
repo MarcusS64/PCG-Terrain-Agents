@@ -123,11 +123,14 @@ public class Agent //: MonoBehaviour
 public class Point
 {
     public int x, y;
+    private int startX, startY;
 
     public Point(int x, int y)
     {
         this.x = x;
         this.y = y;
+        startX = this.x;
+        startY = this.y;
     }
     public void SetNew(int x, int y)
     {
@@ -138,5 +141,11 @@ public class Point
     {
         this.x += x;
         this.y += y;
+    }
+
+    public void Reset()
+    {
+        x = startX;
+        y = startY;
     }
 }
