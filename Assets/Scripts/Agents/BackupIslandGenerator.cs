@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum AgentType { Coast, SmoothCoast, Mountain, Beach }
-public class IslandGenerator : MonoBehaviour
+public class BackupIslandGenerator : MonoBehaviour
 {
     public int depth = 20;
     public int width = 256;
@@ -11,6 +10,7 @@ public class IslandGenerator : MonoBehaviour
     public float scale = 20f;
     [SerializeField] float coastLevel;
 
+    float[,] noiseMap;
     Node[,] squares;
     Agent agent;
     [SerializeField] int startTokens;
@@ -21,32 +21,14 @@ public class IslandGenerator : MonoBehaviour
     [SerializeField] int smoothTokens;
     [SerializeField] int mountainTokens;
     [SerializeField] int mountainTurnLimit;
-
-    Terrain terrain;
+    //[SerializeField] CoastalAgent CoastalAgent;
     private void Start()
-    {       
-        terrain = GetComponent<Terrain>();
-        //GenerateCoast();
-    }
-
-    public void GenerateCoast()
     {
-        //Generate Graph map
-        if (squares != null)
-        {
-            ApplyNewMapParameters();
-        }
-
-        agent = new Agent();
-        var nodes = GetRandomNode(squares[startX, startY]);
-        squares[startX, startY].visited = true;
-        squares[startX, startY].SetHeight(coastLevel, "start");
-        agent.SetProperties(startTokens, squares[startX, startY], nodes.Item1, nodes.Item2);
-
-        terrain.terrainData = GenerateTerrain(terrain.terrainData);
+        //StartTerrainGeneration();
+        
     }
 
-    public void ApplyNewMapParameters()
+    public void StartTerrainGeneration()
     {
         squares = new Node[width, height];
         for (int i = 0; i < width; i++)
@@ -57,7 +39,16 @@ public class IslandGenerator : MonoBehaviour
             }
         }
         ConnectSquares(width, height, true);
-        ConnectSquares(width, height, false);        
+        ConnectSquares(width, height, false);
+
+        agent = new Agent();
+        var nodes = GetRandomNode(squares[startX, startY]);
+        squares[startX, startY].visited = true;
+        squares[startX, startY].SetHeight(coastLevel, "start");
+        agent.SetProperties(startTokens, squares[startX, startY], nodes.Item1, nodes.Item2);
+
+        Terrain terrain = GetComponent<Terrain>();
+        terrain.terrainData = GenerateTerrain(terrain.terrainData);
     }
 
     TerrainData GenerateTerrain(TerrainData terrainData)
@@ -65,10 +56,6 @@ public class IslandGenerator : MonoBehaviour
         //Debug.Log("Terrain generate called");
         terrainData.heightmapResolution = width + 1;
         terrainData.size = new Vector3(width, depth, height);
-
-        CoastalAgent.SetSquaresMap(squares);
-        CoastalAgent.CoastLineGenerate(agent, numberOfChildren, limit);
-        squares = CoastalAgent.ReturnCoast();
 
         terrainData.SetHeights(0, 0, GenerateHeights()); //Takes the height map array values to set the heights of the terrain
         return terrainData;
@@ -78,17 +65,34 @@ public class IslandGenerator : MonoBehaviour
     {
         float[,] heights = new float[width, height];
 
+        CoastalAgent.SetSquaresMap(squares);
+        CoastalAgent.CoastLineGenerate(agent, numberOfChildren, limit);
+        squares = CoastalAgent.ReturnCoast();
+        SmoothCoast();
+        RaiseMountains();
+        //RiseLandmass();
+        //Point mountainStart = new Point(startX, startY);
+
+        //StartMountain:
+        //    MountainAgent.MountainGenerate(mountainStart.x, mountainStart.y, mountainTokens, squares, mountainTurnLimit);
+        //SmoothLandscape();
+
         for (int i = 0; i < width; i++)
         {
-            for (int j = 0; j < height; j++) //Could check for changed values to make it faster perhaps
+            for (int j = 0; j < height; j++)
             {
+                //if (squares[i, j].GetHeight() > 0 && squares[i, j].GetHeight() <= 0.5f)
+                //{
+                //    //Debug.Log("squares smoothed successfully");
+                //    Debug.Log("lifted point");
+                //}
                 heights[i, j] = squares[i, j].GetHeight();
             }
         }
         return heights;
     }
 
-    private void ConnectSquares(int width, int height, bool horizontal)
+    private void ConnectSquares(int width, int height, bool horizontal) //Was static
     {
         if (horizontal) { width--; }
         else { height--; }
@@ -98,7 +102,7 @@ public class IslandGenerator : MonoBehaviour
             {
                 if (horizontal)
                 {
-                    squares[i, j].SetAdjacentSquare(squares[i + 1, j ]);
+                    squares[i, j].SetAdjacentSquare(squares[i + 1, j]);
                     squares[i + 1, j].SetAdjacentSquare(squares[i, j]);
 
                 }
@@ -111,17 +115,28 @@ public class IslandGenerator : MonoBehaviour
         }
     }
 
+    private void SmoothLandscape() //Testing
+    {
+        for (int i = width / 4; i < 3 * width / 4; i += 40)
+        {
+            for (int j = height / 4; j < 3 * height / 4; j += 40)
+            {
+                squares = SmoothingAgent.Smooth(i, j, 10000, squares);
+            }
+        }
+    }
+
     public void SmoothCoast()
     {
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height; j++)
             {
-                if(squares[i, j].visited)
+                if (squares[i, j].visited)
                 {
                     foreach (Node square in squares[i, j].adjacentSquares)
                     {
-                        if(squares[i, j].GetHeight() - square.GetHeight() >= coastLevel)
+                        if (squares[i, j].GetHeight() - square.GetHeight() >= coastLevel)
                         {
                             squares = SmoothingAgent.Smooth(i, j, smoothTokens, squares);
                         }
@@ -129,26 +144,40 @@ public class IslandGenerator : MonoBehaviour
                 }
             }
         }
-
-        terrain.terrainData.SetHeights(0, 0, GenerateHeights());
     }
 
-    public void RaiseMountains()
+    private void RiseLandmass() //Testing
     {
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height; j++)
             {
-                
-                if(squares[i, j].SameSorroundingElevation(5) && squares[i, j].GetHeight() >= coastLevel)
+                if (j > height / 4 && j < 3 * height / 4 && i > width / 4 && i < 3 * width / 4) //Testing purposes
                 {
-                    if(Random.Range(0, 100) > 70)
+                    //heights[i, j] = coastLevel;
+                    squares[i, j].SetHeight(coastLevel, "hello");
+                }
+                //heights[i, j] = squares[i, j].GetHeight();
+                //heights[i, j] = CalculateHeight(i, j);
+            }
+        }
+    }
+
+    public void RaiseMountains()
+    {
+        int k = 0;
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+
+                if (squares[i, j].SameSorroundingElevation(5) && squares[i, j].GetHeight() >= coastLevel)
+                {
+                    if (Random.Range(0, 100) > 70)
                         squares = MountainAgent.RiseMountains(i, j, mountainTokens, squares);
                 }
             }
         }
-
-        terrain.terrainData.SetHeights(0, 0, GenerateHeights());
     }
 
     private (Node, Node) GetRandomNode(Node start) //Might have to check that it's not the one we're standing on already as a start
@@ -159,3 +188,4 @@ public class IslandGenerator : MonoBehaviour
     }
 
 }
+

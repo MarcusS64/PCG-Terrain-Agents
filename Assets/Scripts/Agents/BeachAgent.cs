@@ -37,7 +37,16 @@ public static class BeachAgent
             {
                 startingPoint.Move(direction.x, direction.y);
                 distance++;
-            } while (map[startingPoint.x, startingPoint.y].GetHeight() > 0f && map[startingPoint.x, startingPoint.y].GetHeight() < heightLimit);
+                if(startingPoint.x > map.GetLength(0) || startingPoint.x < 0)
+                {
+                    break;
+                }
+                if(startingPoint.y > map.GetLength(1) || startingPoint.y < 0)
+                {
+                    break;
+                }
+
+            } while ((map[startingPoint.x, startingPoint.y].GetHeight() > 0f && map[startingPoint.x, startingPoint.y].GetHeight() < heightLimit));
 
             if(closestShoreDistance > distance)
             {

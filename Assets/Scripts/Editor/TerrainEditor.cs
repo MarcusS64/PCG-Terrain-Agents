@@ -52,6 +52,12 @@ public class TerrainEditor : Editor
         EditorGUILayout.PropertyField(serializedObject.FindProperty("scale"));
         EditorGUILayout.Space();
 
+        if(GUILayout.Button("Apply map properties"))
+        {
+            Debug.Log("Map parameters saved");
+            generator.ApplyNewMapParameters();
+        }
+            
         EditorGUILayout.TextField("Coast Agent parameters");        
         EditorGUILayout.PropertyField(serializedObject.FindProperty("coastLevel"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("startTokens"));
@@ -61,10 +67,10 @@ public class TerrainEditor : Editor
         EditorGUILayout.PropertyField(serializedObject.FindProperty("numberOfChildren"));
 
         
-        if(GUILayout.Button("Generate terrain"))
+        if(GUILayout.Button("Generate coast"))
         {
-            Debug.Log("Try to Generate new terrain");
-            //generator.StartTerrainGeneration();
+            Debug.Log("Try to Generate new coast");
+            generator.GenerateCoast();
         }
         
     }
@@ -78,7 +84,7 @@ public class TerrainEditor : Editor
         if (GUILayout.Button("Add more mountains"))
         {
             Debug.Log("Try to Generate new terrain");
-            //generator.RaiseMountains();
+            generator.RaiseMountains();
         }
     }
 
@@ -90,7 +96,7 @@ public class TerrainEditor : Editor
         if (GUILayout.Button("Smooth coastline"))
         {
             Debug.Log("Try to Generate new terrain");
-            //generator.SmoothCoast();
+            generator.SmoothCoast();
         }
     }
 
