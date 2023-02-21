@@ -83,7 +83,7 @@ public class TerrainEditor : Editor
 
         if (GUILayout.Button("Add more mountains"))
         {
-            Debug.Log("Try to Generate new terrain");
+            Debug.Log("Try to Generate mountains");
             generator.RaiseMountains();
         }
     }
@@ -95,13 +95,22 @@ public class TerrainEditor : Editor
 
         if (GUILayout.Button("Smooth coastline"))
         {
-            Debug.Log("Try to Generate new terrain");
+            Debug.Log("Smooth area");
             generator.SmoothCoast();
         }
     }
 
     public void DisplayBeachAgentInfo()
     {
+        EditorGUILayout.TextField("Beach Agent parameters");
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("beachStartX"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("beachStartY"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("beachTokens"));
 
+        if (GUILayout.Button("Smooth coastline"))
+        {
+            Debug.Log("Make coast beach");
+            generator.MakeCoastBeach();
+        }
     }
 }

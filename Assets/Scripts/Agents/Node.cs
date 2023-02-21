@@ -121,13 +121,18 @@ public class Node
         return height;
     }
 
-    public void SetHeight(float newHeight, string message)
+    public void AddHeight(float newHeight, string message)
     {
         if (height > 0.5f)
         {
             Debug.Log(message);
         }
         height += newHeight;
+    }
+
+    public void SetHeight(float newHeight)
+    {
+        height = newHeight;
     }
 
     public bool Sorrounded()
