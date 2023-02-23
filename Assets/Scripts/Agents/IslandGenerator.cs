@@ -24,6 +24,14 @@ public class IslandGenerator : MonoBehaviour
     [SerializeField] int beachStartX;
     [SerializeField] int beachStartY;
     [SerializeField] int beachTokens;
+    [SerializeField] int hillStartX = 100;
+    [SerializeField] int hillStartY = 100;
+    [SerializeField] int hillTokens = 10;
+    [SerializeField] float maxHillHeight = 0.8f;
+    [SerializeField] float minHillHeight = 0.6f;
+    [SerializeField] float hillscale = -20f;
+    [SerializeField] int hillAreaWidth = 100;
+    [SerializeField] int hillAreaLength = 100;
 
     Terrain terrain;
     private void Start()
@@ -158,6 +166,13 @@ public class IslandGenerator : MonoBehaviour
     {
         squares = BeachAgent.GenerateBeach(beachStartX, beachStartY, beachTokens, squares);
 
+        terrain.terrainData.SetHeights(0, 0, GenerateHeights());
+    }
+
+    public void BuildHills()
+    {
+        //squares = HillAgent.PerlinHills(hillStartX, hillStartY, squares, hillAreaWidth, hillAreaLength, scale);
+        squares = HillAgent.GenerateHills(hillStartX, hillStartY, squares, hillAreaWidth, hillAreaLength, maxHillHeight, minHillHeight, hillTokens);
         terrain.terrainData.SetHeights(0, 0, GenerateHeights());
     }
 

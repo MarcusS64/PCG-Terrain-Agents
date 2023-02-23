@@ -9,7 +9,7 @@ public class TerrainEditor : Editor
 {
     public enum DisplayCategory
     {
-        Coast, Mountain, Smoothing, Beach
+        Coast, Mountain, Smoothing, Beach, Hill
     }
 
     public DisplayCategory categoryToDisplay;
@@ -37,7 +37,10 @@ public class TerrainEditor : Editor
             case DisplayCategory.Beach:
                 DisplayBeachAgentInfo();
                 break;
-
+            case DisplayCategory.Hill:
+                DisplayHillAgentInfo();
+                break;
+                
         }
 
         serializedObject.ApplyModifiedProperties();
@@ -111,6 +114,25 @@ public class TerrainEditor : Editor
         {
             Debug.Log("Make coast beach");
             generator.MakeCoastBeach();
+        }
+    }
+
+    public void DisplayHillAgentInfo()
+    {
+        EditorGUILayout.TextField("Hill Agent parameters");
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("hillStartX"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("hillStartY"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("hillTokens"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("maxHillHeight"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("minHillHeight"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("hillscale"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("hillAreaWidth"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("hillAreaLength"));
+
+        if (GUILayout.Button("Generate Hills"))
+        {
+            Debug.Log("Make hills on area");
+            generator.BuildHills();
         }
     }
 }
