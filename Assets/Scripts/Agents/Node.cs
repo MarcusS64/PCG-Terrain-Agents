@@ -11,7 +11,8 @@ public class Node
     int score;
     float height;
     public List<Node> adjacentSquares;
-    public bool visited;    
+    public bool visited;
+    public bool queued;
 
     public void SetParent(Node _parent) { parent = _parent; }
     public Node GetParent() { return parent; }
@@ -22,10 +23,11 @@ public class Node
     {
         this.x = x;
         this.y = y;
-        point = new Point(x, y);
+        point = new Point(x, y); //Could remove/replace this
         adjacentSquares = new List<Node>();
         height = 0f;
         visited = false;
+        queued = false;
     }
 
     public int X()

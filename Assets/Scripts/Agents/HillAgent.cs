@@ -18,7 +18,7 @@ public static class HillAgent
         Point location = new Point(startX, startY);
         //(int x, int y) travelDirection = directions[Random.Range(0, directions.Length)];
         //Vector3 direction = new Vector3(travelDirection.x, 0, travelDirection.y);
-        map[startX, startY].SetHeight(2.0f);
+        //map[startX, startY].SetHeight(2.0f); //We set this in PathFinding() during the first loop
         Debug.Log("Hill peak lifted. Hill tokens count is: " + hillTokens);
         PathFinding(map, map[startX, startY], map[startX + radius, startY + radius], hillTokens);
         //map[location.x, location.y].SetHeight(hillHeight);
@@ -39,17 +39,22 @@ public static class HillAgent
     }
 
     public static Queue<Node> myQueue = new Queue<Node>(); //First in first out
+    public static List<Node> removeQueue = new List<Node>();
     public static void PathFinding(Node[,] graph, Node start, Node goal, int tokens)
     {
         myQueue.Clear();
         myQueue.Enqueue(start);
+        start.queued = true;
+        removeQueue.Clear();
+        removeQueue.Add(start);
         Debug.Log("Queue count is: " + myQueue.Count);
         while (myQueue.Count > 0)
         {
-            Node currentTile = myQueue.Dequeue();
+            Node currentTile = myQueue.Dequeue();            
+            tokens--;
             for (int i = 0; i < currentTile.adjacentSquares.Count; i++)
             {
-                if (!currentTile.adjacentSquares[i].visited) //&& !currentTile.adjacentSquares[i].blocked
+                if (!currentTile.adjacentSquares[i].queued) //&& !currentTile.adjacentSquares[i].blocked
                 {
                     myQueue.Enqueue(currentTile.adjacentSquares[i]);                    
                     //currentTile.adjacentSquares[i].SetParent(currentTile);
@@ -57,19 +62,35 @@ public static class HillAgent
                     if (tokens <= 0) //currentTile.adjacentSquares[i] == goal
                     {
                         //RetracePath(start, goal);
+                        foreach (Node node in removeQueue)
+                        {
+                            node.queued = false;
+                        }
                         return;
                     }
-                    currentTile.adjacentSquares[i].visited = true; //Need to untag the children somehow otherwise they will be blocked
-                    currentTile.SetHeight(hillHeight);
+                    currentTile.adjacentSquares[i].queued = true; //Need to untag the children somehow otherwise they will be blocked
+                    removeQueue.Add(currentTile.adjacentSquares[i]);
+                    currentTile.SetHeight(hillHeight); //Replace this with the WaveFunction
                     //currentTile.SetAverageHeight(false);
                     Debug.Log("Set average height");
-                    tokens--;
+                    
                     //currentTile.adjacentSquares[i].color = Color.Blue;
                 }
-
-
             }
         }
+
+       
+    }
+
+    public static void WaveFunction()
+    {
+        float lambda; //period normalize the distance to fit the 2*Mathf.PI 
+        float amplitude; //Height of the hill
+        float distance; //Mathf.sqrt(Mathf.Pow(startX - currentX, 2) + Mathf.Pow(startY - currentY, 2));
+        //Use the Queue to add the points by BFS
+        //Loop through the queue and calculate the distance from the start
+        //Using the period and the distance we should be able to set an apropriate height using the wave equation
+        //Don't forget to decrease the elevation (aplitude) as we move away from the centre
     }
 
     public static Node[,] PerlinHills(int startX, int startY, Node[,] map, int width, int length, float scale)

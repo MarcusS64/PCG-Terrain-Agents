@@ -24,7 +24,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 2772
+  controlID: 49
 --- !u!114 &2
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -250,9 +250,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 100.65564, y: -0.03942707, z: 97.724464}
+    m_Target: {x: 99.027275, y: -0.16947727, z: 98.22619}
     speed: 2
-    m_Value: {x: 100.65564, y: -0.03942707, z: 97.724464}
+    m_Value: {x: 99.027275, y: -0.16947727, z: 98.22619}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -299,13 +299,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.14231555, y: 0.85333925, z: -0.39153516, w: 0.3161639}
+    m_Target: {x: 0.43225765, y: 0.20563738, z: -0.1059997, w: 0.87255967}
     speed: 2
-    m_Value: {x: 0.14219467, y: 0.85261446, z: -0.3912026, w: 0.31589535}
+    m_Value: {x: 0.4318843, y: 0.20545976, z: -0.10590814, w: 0.87180597}
   m_Size:
-    m_Target: 42.17045
+    m_Target: 19.494837
     speed: 2
-    m_Value: 42.17045
+    m_Value: 19.494837
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -354,7 +354,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 2773
+  controlID: 50
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -379,7 +379,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 2774
+  controlID: 51
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -630,8 +630,8 @@ MonoBehaviour:
     y: 736
     width: 1532
     height: 331
-  m_MinSize: {x: 100, y: 100}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 101, y: 121}
+  m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 12}
   m_Panes:
   - {fileID: 11}
@@ -679,22 +679,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets
+    - Assets/Scripts/Agents
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets
+  - Assets/Scripts/Agents
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\Marcus\Dropbox\My PC (Marcus2)\Documents\GitHub\PCG-Terrain-Agents
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: cc5c0000
-    m_LastClickedID: 23756
-    m_ExpandedIDs: 00000000cc5c000000ca9a3b
+    m_SelectedIDs: e65c0000
+    m_LastClickedID: 23782
+    m_ExpandedIDs: 00000000cc5c0000de5c000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -722,7 +722,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000cc5c000000ca9a3b
+    m_ExpandedIDs: 00000000cc5c0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -825,8 +825,8 @@ MonoBehaviour:
     y: 0
     width: 388
     height: 1067
-  m_MinSize: {x: 275, y: 50}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 276, y: 71}
+  m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 14}
   m_Panes:
   - {fileID: 14}
