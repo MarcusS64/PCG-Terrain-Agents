@@ -11,15 +11,20 @@ public static class HillAgent
     public static (int x, int y)[] directions = new (int, int)[] { (-1, 0), (0, -1), (0, 1), (1, 0) };
     //public static int hillTokens = 100;
     public static float hillHeight = 0.5f;
+    public static float lambda;
 
-    public static Node[,] GenerateHills(int startX, int startY, Node[,] map, int width, int length, float maxHeight, float minHeight, int hillTokens) 
+    public static Node[,] GenerateHills(int startX, int startY, Node[,] map, int width, int length, float maxHeight, float minHeight, int hillTokens, float lambda) 
     {
+        HillAgent.lambda = lambda;
         hillHeight = Random.Range(minHeight, maxHeight);
         Point location = new Point(startX, startY);
         //(int x, int y) travelDirection = directions[Random.Range(0, directions.Length)];
         //Vector3 direction = new Vector3(travelDirection.x, 0, travelDirection.y);
         //map[startX, startY].SetHeight(2.0f); //We set this in PathFinding() during the first loop
         Debug.Log("Hill peak lifted. Hill tokens count is: " + hillTokens);
+        //Do Pathfinding for a number of peaks specified by the user around the area.
+        //Take a random point around the hill and do antoher hill there 
+        //Sidenote: stop the hill egeration when the height hits the same height as it already has (somehow)
         PathFinding(map, map[startX, startY], map[startX + radius, startY + radius], hillTokens);
         //map[location.x, location.y].SetHeight(hillHeight);
         
@@ -70,8 +75,8 @@ public static class HillAgent
                     }
                     currentTile.adjacentSquares[i].queued = true; //Need to untag the children somehow otherwise they will be blocked
                     removeQueue.Add(currentTile.adjacentSquares[i]);
-                    currentTile.SetHeight(hillHeight); //Replace this with the WaveFunction
-                    //currentTile.SetAverageHeight(false);
+                    //currentTile.SetHeight(hillHeight); //Replace this with the WaveFunction
+                    currentTile.SetHeight(WaveFunction(start, currentTile));
                     Debug.Log("Set average height");
                     
                     //currentTile.adjacentSquares[i].color = Color.Blue;
@@ -82,15 +87,17 @@ public static class HillAgent
        
     }
 
-    public static void WaveFunction()
+    public static float WaveFunction(Node start, Node current)
     {
-        float lambda; //period normalize the distance to fit the 2*Mathf.PI 
-        float amplitude; //Height of the hill
-        float distance; //Mathf.sqrt(Mathf.Pow(startX - currentX, 2) + Mathf.Pow(startY - currentY, 2));
+        //float lambda = 2f; //period normalize the distance to fit the 2*Mathf.PI 
+        float amplitude = hillHeight; //Height of the hill
+        float distance = Mathf.Sqrt(Mathf.Pow(start.X() - current.X(), 2) + Mathf.Pow(start.Y() - current.Y(), 2));
+        float phaseShift = 0.0f;
         //Use the Queue to add the points by BFS
         //Loop through the queue and calculate the distance from the start
         //Using the period and the distance we should be able to set an apropriate height using the wave equation
         //Don't forget to decrease the elevation (aplitude) as we move away from the centre
+        return amplitude * Mathf.Cos((2 * Mathf.PI / lambda) * distance + phaseShift);
     }
 
     public static Node[,] PerlinHills(int startX, int startY, Node[,] map, int width, int length, float scale)

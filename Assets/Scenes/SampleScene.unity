@@ -688,12 +688,13 @@ MonoBehaviour:
   beachTokens: 100
   hillStartX: 100
   hillStartY: 100
-  hillTokens: 10
-  maxHeight: 0.8
-  minHeight: 0.6
+  hillTokens: 1000
+  maxHillHeight: 0.8
+  minHillHeight: 0.6
   hillscale: -20
   hillAreaWidth: 100
   hillAreaLength: 100
+  lambda: 50
 --- !u!154 &740893013
 TerrainCollider:
   m_ObjectHideFlags: 0
@@ -1022,8 +1023,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.3600211, y: 0.000000022701792, z: -0.000000008760571, w: 0.9329442}
-  m_LocalPosition: {x: 0, y: 76.9, z: -84.8}
+  m_LocalRotation: {x: 0.49560246, y: -0.5043597, z: 0.49563292, w: 0.5043287}
+  m_LocalPosition: {x: 128, y: 184.2, z: 128}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1444,7 +1445,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1328119248}
-  m_LocalRotation: {x: 0.3600211, y: 0.000000022701792, z: -0.000000008760571, w: 0.9329442}
+  m_LocalRotation: {x: 0.3600211, y: -0.000000022701792, z: 0.000000008760571, w: 0.9329442}
   m_LocalPosition: {x: -128, y: 66.9, z: -212.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

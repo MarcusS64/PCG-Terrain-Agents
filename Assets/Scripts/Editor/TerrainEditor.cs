@@ -128,6 +128,10 @@ public class TerrainEditor : Editor
         EditorGUILayout.PropertyField(serializedObject.FindProperty("hillscale"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("hillAreaWidth"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("hillAreaLength"));
+        EditorGUILayout.Space();
+
+        EditorGUILayout.TextField("Wave parameters");
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("lambda"));
 
         if (GUILayout.Button("Generate Hills"))
         {

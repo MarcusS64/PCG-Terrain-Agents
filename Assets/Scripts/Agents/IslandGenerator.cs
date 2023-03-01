@@ -32,6 +32,7 @@ public class IslandGenerator : MonoBehaviour
     [SerializeField] float hillscale = -20f;
     [SerializeField] int hillAreaWidth = 100;
     [SerializeField] int hillAreaLength = 100;
+    [SerializeField] float lambda = 2.0f;
 
     Terrain terrain;
     private void Start()
@@ -172,7 +173,7 @@ public class IslandGenerator : MonoBehaviour
     public void BuildHills()
     {
         //squares = HillAgent.PerlinHills(hillStartX, hillStartY, squares, hillAreaWidth, hillAreaLength, scale);
-        squares = HillAgent.GenerateHills(hillStartX, hillStartY, squares, hillAreaWidth, hillAreaLength, maxHillHeight, minHillHeight, hillTokens);
+        squares = HillAgent.GenerateHills(hillStartX, hillStartY, squares, hillAreaWidth, hillAreaLength, maxHillHeight, minHillHeight, hillTokens, lambda);
         terrain.terrainData.SetHeights(0, 0, GenerateHeights());
     }
 
