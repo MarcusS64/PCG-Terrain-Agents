@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 1117
   m_ShowMode: 4
-  m_Title: Game
+  m_Title: Scene
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -551,13 +551,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: -0.31436393, y: -0.4328154, z: 0.16641119, w: -0.8294183}
+    m_Target: {x: -0.07363508, y: -0.91618526, z: 0.20960885, w: -0.33622435}
     speed: 2
-    m_Value: {x: -0.31408432, y: -0.43243042, z: 0.16626318, w: -0.8286806}
+    m_Value: {x: -0.07388294, y: -0.9148568, z: 0.20930986, w: -0.3372948}
   m_Size:
-    m_Target: 31.7426
+    m_Target: 11.527008
     speed: 2
-    m_Value: 31.7426
+    m_Value: 12.070166
   m_Ortho:
     m_Target: 0
     speed: 2

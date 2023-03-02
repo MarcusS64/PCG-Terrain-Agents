@@ -9,7 +9,7 @@ public class TerrainEditor : Editor
 {
     public enum DisplayCategory
     {
-        Coast, Mountain, Smoothing, Beach, Hill
+        Coast, Mountain, Smoothing, Beach, Hill, Test
     }
 
     public DisplayCategory categoryToDisplay;
@@ -40,6 +40,10 @@ public class TerrainEditor : Editor
             case DisplayCategory.Hill:
                 DisplayHillAgentInfo();
                 break;
+            case DisplayCategory.Test:
+                DisplayTestFunctions();
+                break;
+
                 
         }
 
@@ -132,11 +136,25 @@ public class TerrainEditor : Editor
 
         EditorGUILayout.TextField("Wave parameters");
         EditorGUILayout.PropertyField(serializedObject.FindProperty("lambda"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("waveTokens"));
 
         if (GUILayout.Button("Generate Hills"))
         {
             Debug.Log("Make hills on area");
             generator.BuildHills();
+        }
+    }
+
+    public void DisplayTestFunctions()
+    {
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("depth"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("width"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("height"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("coastLevel"));
+        if (GUILayout.Button("Raise area"))
+        {
+            Debug.Log("Lifted square landmass");
+            generator.RiseLandmass();
         }
     }
 }
