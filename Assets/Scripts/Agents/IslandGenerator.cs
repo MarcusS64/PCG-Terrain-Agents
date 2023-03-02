@@ -32,7 +32,8 @@ public class IslandGenerator : MonoBehaviour
     [SerializeField] float hillscale = -20f;
     [SerializeField] int hillAreaWidth = 100;
     [SerializeField] int hillAreaLength = 100;
-    [SerializeField] float lambda = 2.0f;
+    [SerializeField] float maxlambda = 20.0f;
+    [SerializeField] float minlambda = 10.0f;
     [SerializeField] int waveTokens = 2;
 
     Terrain terrain;
@@ -53,7 +54,7 @@ public class IslandGenerator : MonoBehaviour
         agent = new Agent();
         var nodes = GetRandomNode(squares[startX, startY]);
         squares[startX, startY].visited = true;
-        squares[startX, startY].AddHeight(coastLevel, "start");
+        squares[startX, startY].AddHeight(coastLevel); //, "start"
         agent.SetProperties(startTokens, squares[startX, startY], nodes.Item1, nodes.Item2);
 
         terrain.terrainData = GenerateTerrain(terrain.terrainData);
@@ -174,7 +175,7 @@ public class IslandGenerator : MonoBehaviour
     public void BuildHills()
     {
         //squares = HillAgent.PerlinHills(hillStartX, hillStartY, squares, hillAreaWidth, hillAreaLength, scale);
-        squares = HillAgent.GenerateHills(hillStartX, hillStartY, squares, maxHillHeight, minHillHeight, hillTokens, lambda, waveTokens);
+        squares = HillAgent.GenerateHills(hillStartX, hillStartY, squares, maxHillHeight, minHillHeight, hillTokens, maxlambda, minlambda, waveTokens);
         terrain.terrainData.SetHeights(0, 0, GenerateHeights());
     }
 
@@ -194,7 +195,7 @@ public class IslandGenerator : MonoBehaviour
                 if (j > height / 4 && j < 3 * height / 4 && i > width / 4 && i < 3 * width / 4) //Testing purposes
                 {
                     //heights[i, j] = coastLevel;
-                    squares[i, j].AddHeight(coastLevel, "hello");
+                    squares[i, j].AddHeight(coastLevel); //, "hello"
                 }
                 //heights[i, j] = squares[i, j].GetHeight();
                 //heights[i, j] = CalculateHeight(i, j);

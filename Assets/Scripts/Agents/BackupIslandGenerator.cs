@@ -44,7 +44,7 @@ public class BackupIslandGenerator : MonoBehaviour
         agent = new Agent();
         var nodes = GetRandomNode(squares[startX, startY]);
         squares[startX, startY].visited = true;
-        squares[startX, startY].AddHeight(coastLevel, "start");
+        squares[startX, startY].AddHeight(coastLevel);
         agent.SetProperties(startTokens, squares[startX, startY], nodes.Item1, nodes.Item2);
 
         Terrain terrain = GetComponent<Terrain>();
@@ -155,7 +155,7 @@ public class BackupIslandGenerator : MonoBehaviour
                 if (j > height / 4 && j < 3 * height / 4 && i > width / 4 && i < 3 * width / 4) //Testing purposes
                 {
                     //heights[i, j] = coastLevel;
-                    squares[i, j].AddHeight(coastLevel, "hello");
+                    squares[i, j].AddHeight(coastLevel);
                 }
                 //heights[i, j] = squares[i, j].GetHeight();
                 //heights[i, j] = CalculateHeight(i, j);

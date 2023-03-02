@@ -30,7 +30,7 @@ public static class CoastalAgent
                     //Debug.Log("Start point fix executed");
                 }
                 squares[child.GetXCoord(), child.GetYCoord()].visited = true;
-                squares[child.GetXCoord(), child.GetYCoord()].AddHeight(0.5f, "child lifted");
+                squares[child.GetXCoord(), child.GetYCoord()].AddHeight(0.5f); //, "child lifted"
                 CoastLineGenerate(child, numberOfChildren, limit);
             }
             agent.RemoveToken(agent.GetTokens() / 2);
@@ -183,7 +183,7 @@ public static class CoastalAgent
             if(!squares[agent.GetXCoord(), agent.GetYCoord()].visited)
             {
                 squares[agent.GetXCoord(), agent.GetYCoord()].visited = true;
-                squares[agent.GetXCoord(), agent.GetYCoord()].AddHeight(0.5f, "coastal walk lifted");
+                squares[agent.GetXCoord(), agent.GetYCoord()].AddHeight(0.5f); //, "coastal walk lifted"
             }
             //else
             //{

@@ -22,7 +22,7 @@ public static class BeachAgent
 
         for (int i = 0; i < tokens; i++)
         {
-            map[location.x, location.y].AddHeight(-1 * flattenUnit, "");
+            map[location.x, location.y].AddHeight(-1 * flattenUnit);
             map[location.x, location.y].SetAverageHeight(false);
             
             index = Random.Range(0, map[location.x, location.y].adjacentSquares.Count);

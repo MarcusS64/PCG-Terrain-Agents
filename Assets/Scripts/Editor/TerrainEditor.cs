@@ -135,7 +135,8 @@ public class TerrainEditor : Editor
         EditorGUILayout.Space();
 
         EditorGUILayout.TextField("Wave parameters");
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("lambda"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("maxlambda"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("minlambda"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("waveTokens"));
 
         if (GUILayout.Button("Generate Hills"))

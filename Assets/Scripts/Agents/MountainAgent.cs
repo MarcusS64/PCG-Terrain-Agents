@@ -16,7 +16,7 @@ public static class MountainAgent
         //int index;
         for (int i = 0; i < tokens; i++)
         {
-            map[location.x, location.y].AddHeight(Random.Range(minIncrease, maxIncrease), "Elevated");
+            map[location.x, location.y].AddHeight(Random.Range(minIncrease, maxIncrease)); //, "Elevated"
             //map[location.x, location.y].SetAverageHeight();
             //foreach (Node node in map[location.x, location.y].adjacentSquares)
             //{

@@ -123,11 +123,11 @@ public class Node
         return height;
     }
 
-    public void AddHeight(float newHeight, string message)
+    public void AddHeight(float newHeight)
     {
         if (height > 0.5f)
         {
-            Debug.Log(message);
+            Debug.Log("Higher than 0.5f");
         }
         height += newHeight;
     }
