@@ -13,7 +13,7 @@ public static class HillAgent
     public static float hillHeight = 0.5f;
     public static float lambda;
 
-    public static Node[,] GenerateHills(int startX, int startY, Node[,] map, float maxHeight, float minHeight, int hillTokens, float maxlambda, float minlambda, int waveTokens) 
+    public static Node[,] GenerateHills(int startX, int startY, Node[,] map, float maxHeight, float minHeight, int hillTokens, float maxlambda, float minlambda, int waveTokens, float maxPhaseShift, float minPhaseShift) 
     {
         hillHeight = Random.Range(minHeight, maxHeight);
         Point location = new Point(startX, startY);
@@ -24,9 +24,9 @@ public static class HillAgent
         //Do Pathfinding for a number of peaks specified by the user around the area.
         //Take a random point around the hill and do antoher hill there 
         //Sidenote: stop the hill egeration when the height hits the same height as it already has (somehow)
-        PathFinding(map, map[startX, startY], map[startX + radius, startY + radius], hillTokens, maxHeight, minHeight, waveTokens, maxlambda, minlambda);
-        //map[location.x, location.y].SetHeight(hillHeight);
-        
+        PathFinding(map, map[startX, startY], hillTokens, maxHeight, minHeight, waveTokens, maxlambda, minlambda, maxPhaseShift, minPhaseShift); //map[startX + radius, startY + radius]
+                                                                                                                   //map[location.x, location.y].SetHeight(hillHeight);
+
         return map;
     }
 
@@ -42,9 +42,27 @@ public static class HillAgent
         }
     }
 
+    private static void InterferenceHill(Node[,] graph, Node start, int tokens,float maxHeight, float minHeight,
+        int waveTokens, float maxlambda, float minlambda, float maxPhaseShift, float minPhaseShift)
+    {
+        myQueue.Clear();
+        myQueue.Enqueue(start);
+        start.queued = true;
+        removeQueue.Clear();
+        removeQueue.Add(start);
+
+        for (int i = 0; i < 2; i++)
+        {
+            float amplitude = Random.Range(minHeight, maxHeight); //max Height of the wave
+            float lambda = Random.Range(minlambda, maxlambda);
+            float phaseshifts = Random.Range(minPhaseShift, maxPhaseShift);
+        }
+    }
+
     public static Queue<Node> myQueue = new Queue<Node>(); //First in first out
     public static List<Node> removeQueue = new List<Node>();
-    public static void PathFinding(Node[,] graph, Node start, Node goal, int tokens, float maxHeight, float minHeight, int waveTokens, float maxlambda, float minlambda)
+    public static void PathFinding(Node[,] graph, Node start, int tokens, float maxHeight, float minHeight, 
+        int waveTokens, float maxlambda, float minlambda, float maxPhaseShift, float minPhaseShift)
     {
         myQueue.Clear();
         myQueue.Enqueue(start);
@@ -52,12 +70,15 @@ public static class HillAgent
         removeQueue.Clear();
         removeQueue.Add(start);
         Debug.Log("Queue count is: " + myQueue.Count);
+
         List<float> amplitudes = new List<float>();
         List<float> lambdas = new List<float>();
+        List<float> phaseshifts = new List<float>();
         for (int i = 0; i < waveTokens; i++)
         {
             amplitudes.Add(Random.Range(minHeight, maxHeight)); //max Height of the wave
             lambdas.Add(Random.Range(minlambda, maxlambda));
+            phaseshifts.Add(Random.Range(minPhaseShift, maxPhaseShift));
         }
 
         while (myQueue.Count > 0)
@@ -83,12 +104,10 @@ public static class HillAgent
                     currentTile.adjacentSquares[i].queued = true; //Need to untag the children somehow otherwise they will be blocked
                     removeQueue.Add(currentTile.adjacentSquares[i]);
                     //currentTile.SetHeight(hillHeight); //Replace this with the WaveFunction
-                    //currentTile.SetHeight(WaveFunction(start, currentTile, waveTokens, amplitudes, lambdas));
-                    currentTile.AddHeight(WaveFunction(start, currentTile, waveTokens, amplitudes, lambdas)); 
+                    currentTile.SetHeight(0.5f + WaveFunction(start, currentTile, waveTokens, amplitudes, lambdas, phaseshifts));
+                    //currentTile.AddHeight(WaveFunction(start, currentTile, waveTokens, amplitudes, lambdas)); 
                     //Adding heigh required flatten it back out therwide it will just keep growing
                     //Debug.Log("Set average height");
-                    
-                    //currentTile.adjacentSquares[i].color = Color.Blue;
                 }
             }
         }
@@ -96,12 +115,11 @@ public static class HillAgent
        
     }
 
-    public static float WaveFunction(Node start, Node current, int waveTokens, List<float> amplitudes, List<float> lambdas)
+    public static float WaveFunction(Node start, Node current, int waveTokens, List<float> amplitudes, List<float> lambdas, List<float> phaseShifts)
     {
         //float lambda = 2f; //period normalize the distance to fit the 2*Mathf.PI 
         
         float distance = Mathf.Sqrt(Mathf.Pow(start.X() - current.X(), 2) + Mathf.Pow(start.Y() - current.Y(), 2));
-        float phaseShift = 0.0f;
         //Use the Queue to add the points by BFS
         //Loop through the queue and calculate the distance from the start
         //Using the period and the distance we should be able to set an apropriate height using the wave equation
@@ -112,11 +130,11 @@ public static class HillAgent
         {
             if (i % 2 == 0)
             {
-                height += amplitudes[i] * Mathf.Cos((2 * Mathf.PI / lambdas[i]) * distance + phaseShift);
+                height += amplitudes[i] * Mathf.Cos((2 * Mathf.PI / lambdas[i]) * distance + phaseShifts[i]);
             }
             else
             {
-                height += amplitudes[i] * Mathf.Sin((2 * Mathf.PI / lambdas[i]) * distance + phaseShift);
+                height += amplitudes[i] * Mathf.Sin((2 * Mathf.PI / lambdas[i]) * distance + phaseShifts[i]);
             }
         }
         return height;
@@ -162,6 +180,8 @@ public static class HillAgent
         }
 
     }
+
+
 
 
 }

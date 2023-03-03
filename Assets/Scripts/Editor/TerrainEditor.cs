@@ -138,6 +138,8 @@ public class TerrainEditor : Editor
         EditorGUILayout.PropertyField(serializedObject.FindProperty("maxlambda"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("minlambda"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("waveTokens"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("maxPhaseShift"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("minPhaseShift"));
 
         if (GUILayout.Button("Generate Hills"))
         {

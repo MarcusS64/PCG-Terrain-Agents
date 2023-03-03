@@ -35,6 +35,8 @@ public class IslandGenerator : MonoBehaviour
     [SerializeField] float maxlambda = 20.0f;
     [SerializeField] float minlambda = 10.0f;
     [SerializeField] int waveTokens = 2;
+    [SerializeField] float maxPhaseShift = 0.5f;
+    [SerializeField] float minPhaseShift = -0.5f;
 
     Terrain terrain;
     private void Start()
@@ -175,7 +177,7 @@ public class IslandGenerator : MonoBehaviour
     public void BuildHills()
     {
         //squares = HillAgent.PerlinHills(hillStartX, hillStartY, squares, hillAreaWidth, hillAreaLength, scale);
-        squares = HillAgent.GenerateHills(hillStartX, hillStartY, squares, maxHillHeight, minHillHeight, hillTokens, maxlambda, minlambda, waveTokens);
+        squares = HillAgent.GenerateHills(hillStartX, hillStartY, squares, maxHillHeight, minHillHeight, hillTokens, maxlambda, minlambda, waveTokens, maxPhaseShift, minPhaseShift);
         terrain.terrainData.SetHeights(0, 0, GenerateHeights());
     }
 
@@ -195,12 +197,15 @@ public class IslandGenerator : MonoBehaviour
                 if (j > height / 4 && j < 3 * height / 4 && i > width / 4 && i < 3 * width / 4) //Testing purposes
                 {
                     //heights[i, j] = coastLevel;
-                    squares[i, j].AddHeight(coastLevel); //, "hello"
+                    squares[i, j].SetHeight(coastLevel); //, "hello"
+                    Debug.Log("LAndmass set to coast level");
                 }
                 //heights[i, j] = squares[i, j].GetHeight();
                 //heights[i, j] = CalculateHeight(i, j);
             }
         }
+
+        terrain.terrainData.SetHeights(0, 0, GenerateHeights());
     }
 
 }
