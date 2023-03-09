@@ -26,11 +26,6 @@ public static class HillAgent
         //Sidenote: stop the hill egeration when the height hits the same height as it already has (somehow)
         PathFinding(map, map[startX, startY], hillTokens, maxHeight, minHeight, waveTokens, maxlambda, minlambda, maxPhaseShift, minPhaseShift); //map[startX + radius, startY + radius]
                                                                                                                                                  //map[location.x, location.y].SetHeight(hillHeight);
-        //for (int i = 0; i < 2; i++)
-        //{
-
-        //    PathFinding(map, map[startX + 100 * i, startY], hillTokens, maxHeight, minHeight, waveTokens, maxlambda, minlambda, maxPhaseShift, minPhaseShift);
-        //}
         return map;
     }
 
@@ -41,7 +36,7 @@ public static class HillAgent
         {
             foreach (Node child in map[location.x, location.y].adjacentSquares)
             {
-                child.SetAverageHeight(true);
+                child.SetAverageHeight(true, 3);
             }
         }
     }
@@ -111,10 +106,10 @@ public static class HillAgent
             amplitudes.Add(Random.Range(minHeight, maxHeight)); //max Height of the wave
             lambdas.Add(Random.Range(minlambda, maxlambda));
             phaseshifts.Add(Random.Range(minPhaseShift, maxPhaseShift));
-            startingPoints.Add(graph[start.X() + Random.Range(50, 100), start.Y() + Random.Range(50, 100)]);
+            startingPoints.Add(graph[start.X() + Random.Range(-50, 50), start.Y() + Random.Range(-50, 50)]); //Could change to Range(-50, 50)
         }
 
-        while (myQueue.Count > 0)
+        while (tokens > 0)
         {
             Node currentTile = myQueue.Dequeue();            
             tokens--;
@@ -128,24 +123,53 @@ public static class HillAgent
                     if (tokens <= 0) //currentTile.adjacentSquares[i] == goal
                     {
                         //RetracePath(start, goal);
-                        foreach (Node node in removeQueue)
-                        {
-                            node.queued = false;
-                        }
-                        return;
+                        
+                        break; //Break the for loop
                     }
                     currentTile.adjacentSquares[i].queued = true; //Need to untag the children somehow otherwise they will be blocked
-                    removeQueue.Add(currentTile.adjacentSquares[i]);
-                    //currentTile.SetHeight(hillHeight); //Replace this with the WaveFunction
-                    currentTile.SetHeight(currentTile.GetHeight() + WaveFunction(start, currentTile, waveTokens, amplitudes, lambdas, phaseshifts, startingPoints));
-                    //currentTile.AddHeight(WaveFunction(start, currentTile, waveTokens, amplitudes, lambdas)); 
-                    //Adding heigh required flatten it back out therwide it will just keep growing
-                    //Debug.Log("Set average height");
+                    removeQueue.Add(currentTile.adjacentSquares[i]);                   
                 }
             }
+
+            currentTile.SetHeight(0.5f + WaveFunction(start, currentTile, waveTokens, amplitudes, lambdas, phaseshifts, startingPoints));
+            //currentTile.AddHeight(WaveFunction(start, currentTile, waveTokens, amplitudes, lambdas)); 
+            //Adding heigh required flatten it back out therwide it will just keep growing
+            //Debug.Log("Set average height");
         }
 
-       
+        SmoothBorder(myQueue, removeQueue);
+        foreach (Node node in removeQueue)
+        {
+            node.queued = false;
+        }
+
+    }
+
+    private static void SmoothBorder(Queue<Node> myQueue, List<Node> removeQueue)
+    {
+        int count = 2000;
+        while(myQueue.Count > 0 && count > 0)
+        {
+            Node currentTile = myQueue.Dequeue();
+            float oldTileHeight = currentTile.GetHeight();
+            //currentTile.SetHeight(1);
+            currentTile.SetAverageHeight2(false, 1);
+            count--;
+            if(Mathf.Abs(oldTileHeight - currentTile.GetHeight()) > 0.0001f) //Height delta
+            {
+                for (int i = 0; i < currentTile.adjacentSquares.Count; i++)
+                {
+                    if (!currentTile.adjacentSquares[i].queued)
+                    {
+                        myQueue.Enqueue(currentTile.adjacentSquares[i]);
+
+                        currentTile.adjacentSquares[i].queued = true; //Need to untag the children somehow otherwise they will be blocked
+                        removeQueue.Add(currentTile.adjacentSquares[i]);
+                    }
+                }
+            }            
+        }
+
     }
 
     //Use the Queue to add the points by BFS

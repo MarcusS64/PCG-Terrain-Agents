@@ -59,14 +59,26 @@ public class Node
         return Mathf.Sqrt(Mathf.Pow(this.point.x - point.x, 2) + Mathf.Pow(this.point.y - point.y, 2));
     }
 
-    public void SetAverageHeight(bool includeParent)
+    public void SetAverageHeight(bool includeParent, int biasFactor)
     {
-        float totalHeight = 3 * height; //Bigger weight to the square we're on
+        float totalHeight = biasFactor * height; //Bigger weight to the square we're on
         float numberOfSorroundingSquares = 1;
         foreach (Node square in adjacentSquares)
         {
             totalHeight += square.height + square.GetSorroundingHeight(this, includeParent);
             numberOfSorroundingSquares += 1 + square.adjacentSquares.Count;
+        }
+        height = totalHeight / numberOfSorroundingSquares;
+    }
+
+    public void SetAverageHeight2(bool includeParent, int biasFactor)
+    {
+        float totalHeight = biasFactor * height; //Bigger weight to the square we're on
+        float numberOfSorroundingSquares = 1;
+        foreach (Node square in adjacentSquares)
+        {
+            totalHeight += square.height;
+            numberOfSorroundingSquares += 1;
         }
         height = totalHeight / numberOfSorroundingSquares;
     }

@@ -12,7 +12,7 @@ public static class SmoothingAgent
         //int tokens = agent.GetTokens();
         for (int i = 0; i < tokens; i++)
         {
-            map[location.x, location.y].SetAverageHeight(false);
+            map[location.x, location.y].SetAverageHeight(false, 3);
             index = Random.Range(0, map[location.x, location.y].adjacentSquares.Count);
             location.SetNew(map[location.x, location.y].adjacentSquares[index].X(), map[location.x, location.y].adjacentSquares[index].Y());
         }

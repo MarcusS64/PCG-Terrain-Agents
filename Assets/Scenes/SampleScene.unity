@@ -686,16 +686,19 @@ MonoBehaviour:
   beachStartX: 100
   beachStartY: 100
   beachTokens: 100
-  hillStartX: 100
-  hillStartY: 100
-  hillTokens: 1000
+  hillStartX: 150
+  hillStartY: 150
+  hillTokens: 2000
   maxHillHeight: 0.1
   minHillHeight: 0.05
   hillscale: -20
   hillAreaWidth: 100
   hillAreaLength: 100
-  lambda: 10
+  maxlambda: 20
+  minlambda: 10
   waveTokens: 3
+  maxPhaseShift: 0.5
+  minPhaseShift: -0.5
 --- !u!154 &740893013
 TerrainCollider:
   m_ObjectHideFlags: 0

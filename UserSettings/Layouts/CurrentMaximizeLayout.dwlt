@@ -250,9 +250,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 96.250565, y: 7.4582634, z: 99.87433}
+    m_Target: {x: 143.28738, y: -14.125427, z: 133.73444}
     speed: 2
-    m_Value: {x: 96.250565, y: 7.4582634, z: 99.87433}
+    m_Value: {x: 143.28738, y: -14.125427, z: 133.73444}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -299,13 +299,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.11908022, y: 0.85941285, z: -0.24252886, w: 0.4361562}
+    m_Target: {x: 0.054629583, y: 0.9079883, z: -0.3923023, w: 0.14327924}
     speed: 2
-    m_Value: {x: 0.11933516, y: 0.85797596, z: -0.24212936, w: 0.43704665}
+    m_Value: {x: 0.055382684, y: 0.90634173, z: -0.3932163, w: 0.14442432}
   m_Size:
-    m_Target: 40.636395
+    m_Target: 42.526596
     speed: 2
-    m_Value: 40.636395
+    m_Value: 42.526596
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -621,7 +621,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: ConsoleWindow
+  m_Name: ProjectBrowser
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -630,14 +630,14 @@ MonoBehaviour:
     y: 736
     width: 1532
     height: 331
-  m_MinSize: {x: 101, y: 121}
-  m_MaxSize: {x: 4001, y: 4021}
-  m_ActualView: {fileID: 12}
+  m_MinSize: {x: 231, y: 271}
+  m_MaxSize: {x: 10001, y: 10021}
+  m_ActualView: {fileID: 11}
   m_Panes:
   - {fileID: 11}
   - {fileID: 12}
-  m_Selected: 1
-  m_LastSelected: 0
+  m_Selected: 0
+  m_LastSelected: 1
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
