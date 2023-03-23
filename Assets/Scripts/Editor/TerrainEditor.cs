@@ -57,6 +57,7 @@ public class TerrainEditor : Editor
         EditorGUILayout.PropertyField(serializedObject.FindProperty("width"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("height"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("scale"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("vonNeumanNeighbourhood"));
         EditorGUILayout.Space();
 
         if(GUILayout.Button("Apply map properties"))

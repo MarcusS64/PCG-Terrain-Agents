@@ -67,12 +67,13 @@ public static class MountainAgent
         Point location = new Point(startX, startY);
         int index;
         //int tokens = agent.GetTokens();
-        for (int i = 0; i < tokens; i++)
-        {
-            map[location.x, location.y].SetAverageHeight(true, 3);
-            index = Random.Range(0, map[location.x, location.y].adjacentSquares.Count);
-            location.SetNew(map[location.x, location.y].adjacentSquares[index].X(), map[location.x, location.y].adjacentSquares[index].Y());
-        }
+        //for (int i = 0; i < tokens; i++)
+        //{
+        //    map[location.x, location.y].SetAverageHeight(true, 3);
+        //    //map[location.x, location.y].SetHeight(1f);
+        //    index = Random.Range(0, map[location.x, location.y].adjacentSquares.Count);
+        //    location.SetNew(map[location.x, location.y].adjacentSquares[index].X(), map[location.x, location.y].adjacentSquares[index].Y());
+        //}
         return map;
     }
 }

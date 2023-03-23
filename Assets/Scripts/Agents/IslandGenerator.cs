@@ -10,8 +10,10 @@ public class IslandGenerator : MonoBehaviour
     public int height = 256;
     public float scale = 20f;
     [SerializeField] float coastLevel;
+    [SerializeField] bool vonNeumanNeighbourhood = true;
 
     Node[,] squares;
+    public static (int x, int y)[] coords = new (int, int)[] { (-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1) };
     Agent agent;
     [SerializeField] int startTokens;
     [SerializeField] int startX;
@@ -72,8 +74,19 @@ public class IslandGenerator : MonoBehaviour
                 squares[i, j] = new Node(i, j);
             }
         }
-        ConnectSquares(width, height, true);
-        ConnectSquares(width, height, false);        
+
+        if (vonNeumanNeighbourhood)
+        {
+            ConnectSquares(width, height, true);
+            ConnectSquares(width, height, false);
+            Debug.Log("used von Neuman neighbourhood");
+        }
+        else
+        {
+            ConnectEverySquare(width, height);
+            Debug.Log("used More neighbourhood");
+        }
+              
     }
 
     TerrainData GenerateTerrain(TerrainData terrainData)
@@ -122,6 +135,25 @@ public class IslandGenerator : MonoBehaviour
                 {
                     squares[i, j].SetAdjacentSquare(squares[i, j + 1]);
                     squares[i, j + 1].SetAdjacentSquare(squares[i, j]);
+                }
+            }
+        }
+    }
+
+    private void ConnectEverySquare(int width, int height) //Does connect the diagonal
+    {
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                for (int k = 0; k < coords.Length; k++)//Loops through all the squares in the 8 directions around the square
+                {
+                    int x = i - coords[k].x;
+                    int y = j - coords[k].y;
+                    if (x < width && y < height && x >= 0 && y >= 0) //If not then there is no square to connect
+                    {
+                        squares[i, j].SetAdjacentSquare(squares[x, y]);
+                    }
                 }
             }
         }
@@ -198,7 +230,7 @@ public class IslandGenerator : MonoBehaviour
                 {
                     //heights[i, j] = coastLevel;
                     squares[i, j].SetHeight(coastLevel); //, "hello"
-                    Debug.Log("LAndmass set to coast level");
+                    Debug.Log("Landmass set to coast level");
                 }
                 //heights[i, j] = squares[i, j].GetHeight();
                 //heights[i, j] = CalculateHeight(i, j);
