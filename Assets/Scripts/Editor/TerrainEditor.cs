@@ -47,6 +47,13 @@ public class TerrainEditor : Editor
                 
         }
 
+        EditorGUILayout.Space();
+        if (GUILayout.Button("Reset terrain"))
+        {
+            Debug.Log("Terrain reset");
+            generator.ResetTerrain();
+        }
+
         serializedObject.ApplyModifiedProperties();
     }
 
@@ -86,13 +93,18 @@ public class TerrainEditor : Editor
     public void DisplayMountainAgentInfo()
     {
         EditorGUILayout.TextField("Mountain Agent parameters");
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("mountainStartX"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("mountainStartY"));
+        EditorGUILayout.Space();
         EditorGUILayout.PropertyField(serializedObject.FindProperty("mountainTokens"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("mountainTurnLimit"));
+
 
         if (GUILayout.Button("Add more mountains"))
         {
             Debug.Log("Try to Generate mountains");
-            generator.RaiseMountains();
+            //generator.RaiseMountains();
+            generator.GenerateMountains();
         }
     }
 

@@ -21,6 +21,8 @@ public class IslandGenerator : MonoBehaviour
     [SerializeField] int limit;
     [SerializeField] int numberOfChildren;
     [SerializeField] int smoothTokens;
+    [SerializeField] int mountainStartX;
+    [SerializeField] int mountainStartY;
     [SerializeField] int mountainTokens;
     [SerializeField] int mountainTurnLimit;
     [SerializeField] int beachStartX;
@@ -199,6 +201,13 @@ public class IslandGenerator : MonoBehaviour
         terrain.terrainData.SetHeights(0, 0, GenerateHeights());
     }
 
+    public void GenerateMountains()
+    {
+        squares = MountainAgent.MountainGenerate(mountainStartX, mountainStartY, mountainTokens, squares, mountainTurnLimit);
+
+        terrain.terrainData.SetHeights(0, 0, GenerateHeights());
+    }
+
     public void MakeCoastBeach()
     {
         squares = BeachAgent.GenerateBeach(beachStartX, beachStartY, beachTokens, squares);
@@ -240,4 +249,16 @@ public class IslandGenerator : MonoBehaviour
         terrain.terrainData.SetHeights(0, 0, GenerateHeights());
     }
 
+    public void ResetTerrain()
+    {
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                squares[i, j].SetHeight(0.0f);
+            }
+        }
+
+        terrain.terrainData.SetHeights(0, 0, GenerateHeights());
+    }
 }

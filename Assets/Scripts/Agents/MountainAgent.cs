@@ -5,25 +5,27 @@ using UnityEngine;
 public static class MountainAgent
 {
     static Vector2 direction;
-    static float minIncrease = 0.5f;
-    static float maxIncrease = 0.7f;
+    static float minIncrease = 0.8f;
+    static float maxIncrease = 1f;
     static float rotation = 45f;
+    static List<Point> mountainPath;
+    static Queue<Point> pathQueue;
     public static Node[,] MountainGenerate(int startX, int startY, int tokens, Node[,] map, int turnLimit) 
     {
         Point location = new Point(startX, startY);
-
+        mountainPath = new List<Point>();
+        pathQueue = new Queue<Point>();
         GetNewDirection();
         //int index;
         for (int i = 0; i < tokens; i++)
         {
+            mountainPath.Add(location);
             map[location.x, location.y].AddHeight(Random.Range(minIncrease, maxIncrease)); //, "Elevated"
-            //map[location.x, location.y].SetAverageHeight();
-            //foreach (Node node in map[location.x, location.y].adjacentSquares)
-            //{
-            //    SmoothingAgent.Smooth(node.X(), node.Y(), 5, map);
-            //}
-            
-            
+            //Debug.Log(location.x + ", " + location.y);
+
+            LiftSorounding(location, map);
+
+
             location.Move((int)Mathf.Ceil(direction.x), (int)Mathf.Ceil(direction.y));
             //index = Random.Range(0, map[location.x, location.y].adjacentSquares.Count);
             //location.SetNew(map[location.x, location.y].adjacentSquares[index].X(), map[location.x, location.y].adjacentSquares[index].Y());
@@ -38,6 +40,15 @@ public static class MountainAgent
             }
         }
         return map;
+    }
+
+    private static void LiftSorounding(Point location, Node[,] map)
+    {
+        //map[location.x, location.y].SetAverageHeight(false, 2);
+        foreach (Node node in map[location.x, location.y].adjacentSquares)
+        {
+            SmoothingAgent.Smooth(node.X(), node.Y(), 4, map);
+        }
     }
 
     private static void GetNewDirection()
@@ -67,13 +78,13 @@ public static class MountainAgent
         Point location = new Point(startX, startY);
         int index;
         //int tokens = agent.GetTokens();
-        //for (int i = 0; i < tokens; i++)
-        //{
-        //    map[location.x, location.y].SetAverageHeight(true, 3);
-        //    //map[location.x, location.y].SetHeight(1f);
-        //    index = Random.Range(0, map[location.x, location.y].adjacentSquares.Count);
-        //    location.SetNew(map[location.x, location.y].adjacentSquares[index].X(), map[location.x, location.y].adjacentSquares[index].Y());
-        //}
+        for (int i = 0; i < tokens; i++)
+        {
+            map[location.x, location.y].SetAverageHeight(true, 3);
+            //map[location.x, location.y].SetHeight(1f);
+            index = Random.Range(0, map[location.x, location.y].adjacentSquares.Count);
+            location.SetNew(map[location.x, location.y].adjacentSquares[index].X(), map[location.x, location.y].adjacentSquares[index].Y());
+        }
         return map;
     }
 }

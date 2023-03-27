@@ -675,13 +675,16 @@ MonoBehaviour:
   height: 256
   scale: 20
   coastLevel: 0.5
+  vonNeumanNeighbourhood: 1
   startTokens: 10000
   startX: 100
   startY: 100
   limit: 8
   numberOfChildren: 2
   smoothTokens: 4
-  mountainTokens: 1000
+  mountainStartX: 120
+  mountainStartY: 120
+  mountainTokens: 100
   mountainTurnLimit: 8
   beachStartX: 100
   beachStartY: 100
@@ -1304,7 +1307,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1238693976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1449,7 +1452,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1328119248}
-  m_LocalRotation: {x: 0.3600211, y: -0.000000022701792, z: 0.000000008760571, w: 0.9329442}
+  m_LocalRotation: {x: 0.3600211, y: 0.000000022701792, z: -0.000000008760571, w: 0.9329442}
   m_LocalPosition: {x: -128, y: 66.9, z: -212.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
