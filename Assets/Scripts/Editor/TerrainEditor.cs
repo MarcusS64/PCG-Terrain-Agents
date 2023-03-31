@@ -85,6 +85,7 @@ public class TerrainEditor : Editor
         if(GUILayout.Button("Generate coast"))
         {
             Debug.Log("Try to Generate new coast");
+            generator.ResetTerrain();
             generator.GenerateCoast();
         }
         
@@ -103,8 +104,8 @@ public class TerrainEditor : Editor
         if (GUILayout.Button("Add more mountains"))
         {
             Debug.Log("Try to Generate mountains");
-            //generator.RaiseMountains();
-            generator.GenerateMountains();
+            generator.RaiseMountains();
+            //generator.GenerateMountains();
         }
     }
 

@@ -255,6 +255,7 @@ public class IslandGenerator : MonoBehaviour
         {
             for (int j = 0; j < height; j++)
             {
+                squares[i, j].visited = false;
                 squares[i, j].SetHeight(0.0f);
             }
         }
