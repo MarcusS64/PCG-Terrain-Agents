@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
+using System;
 
 public enum AgentType { Coast, SmoothCoast, Mountain, Beach }
 public class IslandGenerator : MonoBehaviour
@@ -28,8 +30,12 @@ public class IslandGenerator : MonoBehaviour
     [SerializeField] int beachStartX;
     [SerializeField] int beachStartY;
     [SerializeField] int beachTokens;
-    [SerializeField] int hillStartX = 100;
-    [SerializeField] int hillStartY = 100;
+    [SerializeField]
+    [OnChangedCall("onSerializedPropertyChange")]
+    public int hillStartX = 100;
+    [SerializeField]
+    [OnChangedCall("onSerializedPropertyChange")] 
+    public int hillStartY = 100;
     [SerializeField] int hillTokens = 10;
     [SerializeField] float maxHillHeight = 0.8f;
     [SerializeField] float minHillHeight = 0.6f;
@@ -43,6 +49,7 @@ public class IslandGenerator : MonoBehaviour
     [SerializeField] float minPhaseShift = -0.5f;
 
     Terrain terrain;
+    public static event Action OnAttributeChanged;
     private void Start()
     {       
         terrain = GetComponent<Terrain>();
@@ -192,7 +199,7 @@ public class IslandGenerator : MonoBehaviour
                 
                 if(squares[i, j].SameSorroundingElevation(5) && squares[i, j].GetHeight() >= coastLevel)
                 {
-                    if(Random.Range(0, 100) > 70)
+                    if(UnityEngine.Random.Range(0, 100) > 70)
                         squares = MountainAgent.RiseMountains(i, j, mountainTokens, squares);
                 }
             }
@@ -224,8 +231,8 @@ public class IslandGenerator : MonoBehaviour
 
     private (Node, Node) GetRandomNode(Node start) //Might have to check that it's not the one we're standing on already as a start
     {
-        Node repulsor = squares[Random.Range(0, width), Random.Range(0, height)];
-        Node attractor = squares[Random.Range(0, width), Random.Range(0, height)];
+        Node repulsor = squares[UnityEngine.Random.Range(0, width), UnityEngine.Random.Range(0, height)];
+        Node attractor = squares[UnityEngine.Random.Range(0, width), UnityEngine.Random.Range(0, height)];
         return (repulsor, attractor);
     }
 
@@ -261,5 +268,11 @@ public class IslandGenerator : MonoBehaviour
         }
 
         terrain.terrainData.SetHeights(0, 0, GenerateHeights());
+    }
+
+    public void onSerializedPropertyChange()
+    {
+        Debug.Log("Merker moved");
+        OnAttributeChanged?.Invoke();
     }
 }
