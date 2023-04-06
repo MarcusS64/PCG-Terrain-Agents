@@ -9,7 +9,7 @@ public class TerrainEditor : Editor
 {
     public enum DisplayCategory
     {
-        Coast, Mountain, Smoothing, Beach, Hill, Test
+        Coast, Mountain, Smoothing, Beach, Hill, River, Test
     }
 
     public DisplayCategory categoryToDisplay;
@@ -39,6 +39,9 @@ public class TerrainEditor : Editor
                 break;
             case DisplayCategory.Hill:
                 DisplayHillAgentInfo();
+                break;
+            case DisplayCategory.River:
+                DisplayRiverAgentInfo();
                 break;
             case DisplayCategory.Test:
                 DisplayTestFunctions();
@@ -162,6 +165,19 @@ public class TerrainEditor : Editor
         }
     }
 
+    public void DisplayRiverAgentInfo()
+    {
+        EditorGUILayout.TextField("River Agent parameters");
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("riverTokens"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("coastLimit"));
+
+        if (GUILayout.Button("Add River"))
+        {            
+            generator.AddRiver();
+            Debug.Log("River added to the landmass");
+        }
+    }
+
     public void DisplayTestFunctions()
     {
         EditorGUILayout.PropertyField(serializedObject.FindProperty("depth"));
@@ -169,9 +185,9 @@ public class TerrainEditor : Editor
         EditorGUILayout.PropertyField(serializedObject.FindProperty("height"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("coastLevel"));
         if (GUILayout.Button("Raise area"))
-        {
-            Debug.Log("Lifted square landmass");
+        {            
             generator.RiseLandmass();
+            Debug.Log("Lifted square landmass");
         }
     }
 }

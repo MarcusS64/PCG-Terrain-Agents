@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RiverAgent : AgentG
+public class RiverAgentG : AgentG
 {
     List<Vector3> pathList = new List<Vector3>();
     int index = 0;

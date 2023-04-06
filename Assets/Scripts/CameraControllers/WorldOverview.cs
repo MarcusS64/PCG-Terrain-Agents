@@ -31,17 +31,17 @@ public class WorldOverview : MonoBehaviour
             //Debug.Log("Read key press");
             if (CameraSwitcher.IsActiveCamera(freeLook))
             {
-                Debug.Log("Switch to overview");
+                //Debug.Log("Switch to overview");
                 CameraSwitcher.SwitchCamera(overview);
             }
             else if (CameraSwitcher.IsActiveCamera(overview))
             {
-                Debug.Log("Switch to free look");
+                //Debug.Log("Switch to free look");
                 CameraSwitcher.SwitchCamera(lookAtObj);
             }
             else if (CameraSwitcher.IsActiveCamera(lookAtObj))
             {
-                Debug.Log("Switch to follow obj");
+                //Debug.Log("Switch to follow obj");
                 CameraSwitcher.SwitchCamera(freeLook);
             }
         }

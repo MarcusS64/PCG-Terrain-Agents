@@ -47,6 +47,8 @@ public class IslandGenerator : MonoBehaviour
     [SerializeField] int waveTokens = 2;
     [SerializeField] float maxPhaseShift = 0.5f;
     [SerializeField] float minPhaseShift = -0.5f;
+    [SerializeField] int riverTokens = 10;
+    [SerializeField] float coastLimit = 0.5f;
 
     Terrain terrain;
     public static event Action OnAttributeChanged;
@@ -236,6 +238,12 @@ public class IslandGenerator : MonoBehaviour
         return (repulsor, attractor);
     }
 
+    public void AddRiver()
+    {
+        squares = RiverAgent.GenerateRiver(riverTokens, squares, coastLimit);
+        terrain.terrainData.SetHeights(0, 0, GenerateHeights());
+    }
+
     public void RiseLandmass() //Testing
     {
         for (int i = 0; i < width; i++)
@@ -246,7 +254,7 @@ public class IslandGenerator : MonoBehaviour
                 {
                     //heights[i, j] = coastLevel;
                     squares[i, j].SetHeight(coastLevel); //, "hello"
-                    Debug.Log("Landmass set to coast level");
+                    //Debug.Log("Landmass set to coast level");
                 }
                 //heights[i, j] = squares[i, j].GetHeight();
                 //heights[i, j] = CalculateHeight(i, j);

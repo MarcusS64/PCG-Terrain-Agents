@@ -43,7 +43,7 @@ public class DrawRectangle : MonoBehaviour
             if (Input.GetMouseButton(0))
             {
                 //Debug.Log("register helt M-button");
-                Debug.Log("Initial mouse pos: " + Input.mousePosition);
+                //Debug.Log("Initial mouse pos: " + Input.mousePosition);
                 currentMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 lineRend.SetPosition(0, new Vector2(initialMousePosition.x, initialMousePosition.y));
                 lineRend.SetPosition(1, new Vector2(initialMousePosition.x, currentMousePosition.y));
