@@ -31,9 +31,14 @@ public static class RiverAgent
                 pathList.Add(map[location.x, location.y]);
             }
 
-            for (int i = pathList.Count - 1; i > -1; i--)
+            for (int i = pathList.Count - 1; i > -1; i--) //Do this for all the neighbours too
             {
                 pathList[i].AddHeight(-0.1f);
+            }
+
+            foreach (Node node in pathList)
+            {
+                SmoothingAgent.Smooth(node.X(), node.Y(), 4, map);
             }
         }
         
@@ -50,7 +55,7 @@ public static class RiverAgent
         {
             if(currentNode.adjacentSquares[i].GetHeight() <= minHeight) //Check node with the smallest height
             {
-                float distance = Mathf.Sqrt(Mathf.Pow(goal.x - currentNode.X(), 2) + Mathf.Pow(goal.y - currentNode.Y(), 2)); //Check node closest to the goal point
+                float distance = Mathf.Sqrt(Mathf.Pow(goal.x - currentNode.adjacentSquares[i].X(), 2) + Mathf.Pow(goal.y - currentNode.adjacentSquares[i].Y(), 2)); //Check node closest to the goal point
                 Debug.Log(distance);
                 if (distance < minDistance)
                 {
