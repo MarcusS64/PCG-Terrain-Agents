@@ -33,7 +33,13 @@ public static class RiverAgent
 
             for (int i = pathList.Count - 1; i > -1; i--) //Do this for all the neighbours too
             {
+                pathList[i].SetHeight(0.5f);
                 pathList[i].AddHeight(-0.1f);
+                foreach (Node neighbour in pathList[i].adjacentSquares)
+                {
+                    neighbour.SetHeight(0.5f);
+                    neighbour.AddHeight(-0.1f);
+                }
             }
 
             foreach (Node node in pathList)
