@@ -73,6 +73,7 @@ public class IslandGenerator : MonoBehaviour
         agent.SetProperties(startTokens, squares[startX, startY], nodes.Item1, nodes.Item2);
 
         terrain.terrainData = GenerateTerrain(terrain.terrainData);
+        GetComponent<AssignSplatMap>().UpdateSplatMap();
     }
 
     public void ApplyNewMapParameters()
@@ -190,6 +191,7 @@ public class IslandGenerator : MonoBehaviour
         }
 
         terrain.terrainData.SetHeights(0, 0, GenerateHeights());
+        GetComponent<AssignSplatMap>().UpdateSplatMap();
     }
 
     public void RaiseMountains()
@@ -208,6 +210,7 @@ public class IslandGenerator : MonoBehaviour
         }
 
         terrain.terrainData.SetHeights(0, 0, GenerateHeights());
+        GetComponent<AssignSplatMap>().UpdateSplatMap();
     }
 
     public void GenerateMountains()
@@ -215,6 +218,7 @@ public class IslandGenerator : MonoBehaviour
         squares = MountainAgent.MountainGenerate(mountainStartX, mountainStartY, mountainTokens, squares, mountainTurnLimit);
 
         terrain.terrainData.SetHeights(0, 0, GenerateHeights());
+        GetComponent<AssignSplatMap>().UpdateSplatMap();
     }
 
     public void MakeCoastBeach()
@@ -229,6 +233,7 @@ public class IslandGenerator : MonoBehaviour
         //squares = HillAgent.PerlinHills(hillStartX, hillStartY, squares, hillAreaWidth, hillAreaLength, scale);
         squares = HillAgent.GenerateHills(hillStartX, hillStartY, squares, maxHillHeight, minHillHeight, hillTokens, maxlambda, minlambda, waveTokens, maxPhaseShift, minPhaseShift);
         terrain.terrainData.SetHeights(0, 0, GenerateHeights());
+        GetComponent<AssignSplatMap>().UpdateSplatMap();
     }
 
     private (Node, Node) GetRandomNode(Node start) //Might have to check that it's not the one we're standing on already as a start
@@ -242,6 +247,7 @@ public class IslandGenerator : MonoBehaviour
     {
         squares = RiverAgent.GenerateRiver(riverTokens, squares, coastLimit);
         terrain.terrainData.SetHeights(0, 0, GenerateHeights());
+        GetComponent<AssignSplatMap>().UpdateSplatMap();
     }
 
     public void RiseLandmass() //Testing
@@ -262,6 +268,7 @@ public class IslandGenerator : MonoBehaviour
         }
 
         terrain.terrainData.SetHeights(0, 0, GenerateHeights());
+        GetComponent<AssignSplatMap>().UpdateSplatMap();
     }
 
     public void ResetTerrain()
@@ -276,6 +283,7 @@ public class IslandGenerator : MonoBehaviour
         }
 
         terrain.terrainData.SetHeights(0, 0, GenerateHeights());
+        GetComponent<AssignSplatMap>().UpdateSplatMap();
     }
 
     public void onSerializedPropertyChange()

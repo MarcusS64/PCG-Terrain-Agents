@@ -7,9 +7,13 @@ public class AssignSplatMap : MonoBehaviour
 
     void Start()
     {
+        UpdateSplatMap();             
+    }
+
+    public void UpdateSplatMap()
+    {
         // Get the attached terrain component
         Terrain terrain = GetComponent<Terrain>();
-
         // Get a reference to the terrain data
         TerrainData terrainData = terrain.terrainData;
 
@@ -39,7 +43,8 @@ public class AssignSplatMap : MonoBehaviour
                 // CHANGE THE RULES BELOW TO SET THE WEIGHTS OF EACH TEXTURE ON WHATEVER RULES YOU WANT
 
                 // Texture[0] has constant influence
-                splatWeights[0] = 0.5f;
+                //splatWeights[0] = 0.5f;
+                splatWeights[0] = Mathf.Clamp01(steepness * steepness / (terrainData.heightmapResolution / 5.0f));
 
                 // Texture[1] is stronger at lower altitudes
                 splatWeights[1] = Mathf.Clamp01((terrainData.heightmapResolution - height));
@@ -48,6 +53,8 @@ public class AssignSplatMap : MonoBehaviour
                 // Note "steepness" is unbounded, so we "normalise" it by dividing by the extent of heightmap height and scale factor
                 // Subtract result from 1.0 to give greater weighting to flat surfaces
                 splatWeights[2] = 1.0f - Mathf.Clamp01(steepness * steepness / (terrainData.heightmapResolution / 5.0f));
+
+
 
                 // Texture[3] increases with height but only on surfaces facing positive Z axis 
                 //splatWeights[0] = height * Mathf.Clamp01(normal.z);

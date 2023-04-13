@@ -5,64 +5,105 @@ using UnityEngine;
 public static class RiverAgent
 {
     static List<Node> pathList = new List<Node>();
-    static bool pathFound;
+    static Queue<Node> tabooList = new Queue<Node>();
     static float maxDistance;
     public static (int x, int y)[] directions = new (int, int)[] { (-1, 0), (0, -1), (0, 1), (1, 0) };
     public static Node[,] GenerateRiver(int tokens, Node[,] map, float coastLimit) //int minimumLength
     {
-        pathList.Clear();
-        pathFound = false;
         maxDistance = Mathf.Sqrt(Mathf.Pow(map.GetLength(0), 2) + Mathf.Pow(map.GetLength(1), 2));
-        Point location = GetRandomBorderPoint(map, coastLimit);
-        Point goal = new Point(map.GetLength(0) / 2, map.GetLength(1) / 2);
-        //Debug.Log(goal.x + " : " + goal.y);
-
-        if(location.x != -1 && location.y != -1)
+        bool done = false;
+        int safetyCounter = 0;
+        do
         {
-            pathList.Add(map[location.x, location.y]);
-            int index;
-            //int tokens = agent.GetTokens();
-            for (int i = 0; i < tokens; i++)
+            pathList.Clear();
+            tabooList.Clear();
+            Point location = GetRandomBorderPoint(map, coastLimit);
+            Point goal = new Point(map.GetLength(0) / 2, map.GetLength(1) / 2);
+            //Debug.Log(goal.x + " : " + goal.y);
+
+            if (location.x != -1 && location.y != -1)
             {
-                //map[location.x, location.y].SetAverageHeight(true, 3);
-                //map[location.x, location.y].SetHeight(1f);            
-                index = GetNextNodeIndex(map[location.x, location.y], goal);//Random.Range(0, map[location.x, location.y].adjacentSquares.Count);
-                location.SetNew(map[location.x, location.y].adjacentSquares[index].X(), map[location.x, location.y].adjacentSquares[index].Y());
                 pathList.Add(map[location.x, location.y]);
-            }
-
-            for (int i = pathList.Count - 1; i > -1; i--) //Do this for all the neighbours too
-            {
-                pathList[i].SetHeight(0.5f);
-                pathList[i].AddHeight(-0.1f);
-                foreach (Node neighbour in pathList[i].adjacentSquares)
+                tabooList.Enqueue(map[location.x, location.y]);
+                int index;
+                done = true;
+                for (int i = 0; i < tokens; i++)
                 {
-                    neighbour.SetHeight(0.5f);
-                    neighbour.AddHeight(-0.1f);
-                }
-            }
+                    //map[location.x, location.y].SetAverageHeight(true, 3);
+                    //map[location.x, location.y].SetHeight(1f);            
+                    index = GetNextNodeIndex(map[location.x, location.y], goal, tabooList, coastLimit);
+                    if (index < 0)
+                    {
+                        break;
+                    }
+                    location.SetNew(map[location.x, location.y].adjacentSquares[index].X(), map[location.x, location.y].adjacentSquares[index].Y());
+                    pathList.Add(map[location.x, location.y]);
+                    if (goal.x == location.x && goal.y == location.y)
+                    {
+                        done = true;
+                        break;
+                    }
 
-            foreach (Node node in pathList)
-            {
-                SmoothingAgent.Smooth(node.X(), node.Y(), 4, map);
+                    //tabooList.Dequeue();
+                    tabooList.Enqueue(map[location.x, location.y]);                    
+                }
+
+                if(pathList.Count == tokens + 1)
+                {
+                    done = true;
+                }
+
+                if (done)
+                {
+                    for (int i = pathList.Count - 1; i > -1; i--) //Do this for all the neighbours too
+                    {
+                        pathList[i].SetHeight(0.5f);
+                        pathList[i].AddHeight(-0.1f);
+                        foreach (Node neighbour in pathList[i].adjacentSquares)
+                        {
+                            neighbour.SetHeight(0.5f);
+                            neighbour.AddHeight(-0.1f);
+                        }
+                    }
+
+                    foreach (Node node in pathList)
+                    {
+                        SmoothingAgent.Smooth(node.X(), node.Y(), 4, map);
+                    }
+                    Debug.Log("Number of nodes in path:" + pathList.Count);
+                }
+                
             }
-        }
+            safetyCounter++;
+        } while (!done && safetyCounter < 5);
         
+        if(safetyCounter == 5)
+        {
+            Debug.Log("Path for River failed 5 times!");
+        }
 
         return map;
     }
 
-    private static int GetNextNodeIndex(Node currentNode, Point goal) //Could check for a height limit for the river to climb and stop it sooner
+    private static int GetNextNodeIndex(Node currentNode, Point goal, Queue<Node> tabooList, float coastLimit) //Could check for a height limit for the river to climb and stop it sooner
     {
         int index = -1;
         float minDistance = maxDistance;
         float minHeight = 100f;
+        bool isTaboo = false;
         for (int i = 0; i < currentNode.adjacentSquares.Count; i++)
         {
-            if(currentNode.adjacentSquares[i].GetHeight() <= minHeight) //Check node with the smallest height
+            foreach(Node node in tabooList)
+            {
+                if(node == currentNode.adjacentSquares[i])
+                {
+                    isTaboo = true;
+                }
+            }
+            if(currentNode.adjacentSquares[i].GetHeight() <= minHeight && !isTaboo && currentNode.adjacentSquares[i].GetHeight() >= 0.25f && currentNode.adjacentSquares[i].GetHeight() < 0.85f) //Check node with the smallest height
             {
                 float distance = Mathf.Sqrt(Mathf.Pow(goal.x - currentNode.adjacentSquares[i].X(), 2) + Mathf.Pow(goal.y - currentNode.adjacentSquares[i].Y(), 2)); //Check node closest to the goal point
-                Debug.Log(distance);
+                //Debug.Log(distance);
                 if (distance < minDistance)
                 {
                     minHeight = currentNode.adjacentSquares[i].GetHeight();
@@ -70,7 +111,7 @@ public static class RiverAgent
                     index = i;
                 }
             }
-            
+            isTaboo = false;
         }
 
         return index;
