@@ -12,6 +12,8 @@ public class IslandGenerator : MonoBehaviour
     public int height = 256;
     public float scale = 20f;
     [SerializeField] float coastLevel;
+    [SerializeField] float maxNoise = 0.01f;
+    [SerializeField] float minNoise = - 0.01f;
     [SerializeField] bool vonNeumanNeighbourhood = true;
 
     Node[,] squares;
@@ -27,6 +29,8 @@ public class IslandGenerator : MonoBehaviour
     [SerializeField] int mountainStartY;
     [SerializeField] int mountainTokens;
     [SerializeField] int mountainTurnLimit;
+    [SerializeField] int mountainProbability;
+    [SerializeField] int mountainHeightWeight;
     [SerializeField] int beachStartX;
     [SerializeField] int beachStartY;
     [SerializeField] int beachTokens;
@@ -201,10 +205,10 @@ public class IslandGenerator : MonoBehaviour
             for (int j = 0; j < height; j++)
             {
                 
-                if(squares[i, j].SameSorroundingElevation(5) && squares[i, j].GetHeight() >= coastLevel)
+                if(squares[i, j].SameSorroundingElevation(5, maxNoise) && squares[i, j].GetHeight() >= coastLevel)
                 {
-                    if(UnityEngine.Random.Range(0, 100) > 70)
-                        squares = MountainAgent.RiseMountains(i, j, mountainTokens, squares);
+                    if(UnityEngine.Random.Range(0, 100) > mountainProbability)
+                        squares = MountainAgent.RiseMountains(i, j, mountainTokens, squares, mountainHeightWeight);
                 }
             }
         }
@@ -279,6 +283,23 @@ public class IslandGenerator : MonoBehaviour
             {
                 squares[i, j].visited = false;
                 squares[i, j].SetHeight(0.0f);
+            }
+        }
+
+        terrain.terrainData.SetHeights(0, 0, GenerateHeights());
+        GetComponent<AssignSplatMap>().UpdateSplatMap();
+    }
+
+    public void AddNoise()
+    {
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                if(squares[i, j].GetHeight() >= coastLevel)
+                {
+                    squares[i, j].AddHeight(UnityEngine.Random.Range(minNoise, maxNoise));
+                }
             }
         }
 

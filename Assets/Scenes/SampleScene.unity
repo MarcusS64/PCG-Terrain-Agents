@@ -687,11 +687,13 @@ MonoBehaviour:
   mountainStartY: 120
   mountainTokens: 200
   mountainTurnLimit: 8
+  mountainProbability: 70
+  mountainHeightWeight: 3
   beachStartX: 100
   beachStartY: 100
   beachTokens: 100
-  hillStartX: 150
-  hillStartY: 150
+  hillStartX: 128
+  hillStartY: 128
   hillTokens: 2000
   maxHillHeight: 0.1
   minHillHeight: 0.05
@@ -1467,7 +1469,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1328119248}
-  m_LocalRotation: {x: 0.3600211, y: -0.000000022701792, z: 0.000000008760571, w: 0.9329442}
+  m_LocalRotation: {x: 0.3600211, y: 0.000000022701792, z: -0.000000008760571, w: 0.9329442}
   m_LocalPosition: {x: -128, y: 66.9, z: -212.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

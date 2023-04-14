@@ -102,13 +102,13 @@ public class Node
         return totalSorroundingHeight;
     }
 
-    public bool SameSorroundingElevation(int radius)
+    public bool SameSorroundingElevation(int radius, float noiseValue)
     {
         bool sameElevation = true;
         radius--;
         foreach (Node node in adjacentSquares)
         {
-            if (height != node.GetHeight())
+            if (Mathf.Abs(height - node.GetHeight()) > 2 * noiseValue)
             {
                 sameElevation = false;
                 return sameElevation;
@@ -118,7 +118,7 @@ public class Node
         {
             foreach (Node node in adjacentSquares)
             {
-                sameElevation = node.SameSorroundingElevation(radius);
+                sameElevation = node.SameSorroundingElevation(radius, noiseValue);
                 if (!sameElevation)
                 {
                     return sameElevation;

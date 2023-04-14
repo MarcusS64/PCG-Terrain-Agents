@@ -57,12 +57,15 @@ public static class RiverAgent
                 {
                     for (int i = pathList.Count - 1; i > -1; i--) //Do this for all the neighbours too
                     {
+                        float heightDecrease = -0.1f;
+                        float addedDecrease = -0.2f * (1 - ((float)i / pathList.Count));
+                        //Debug.Log("Added decrease: " + addedDecrease);
                         pathList[i].SetHeight(0.5f);
-                        pathList[i].AddHeight(-0.1f);
+                        pathList[i].AddHeight(heightDecrease + addedDecrease);
                         foreach (Node neighbour in pathList[i].adjacentSquares)
                         {
                             neighbour.SetHeight(0.5f);
-                            neighbour.AddHeight(-0.1f);
+                            neighbour.AddHeight(heightDecrease + addedDecrease);
                         }
                     }
 

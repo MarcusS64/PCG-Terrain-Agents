@@ -73,14 +73,14 @@ public static class MountainAgent
         return v;
     }
 
-    public static Node[,] RiseMountains(int startX, int startY, int tokens, Node[,] map)
+    public static Node[,] RiseMountains(int startX, int startY, int tokens, Node[,] map, int heightWeight)
     {
         Point location = new Point(startX, startY);
         int index;
         //int tokens = agent.GetTokens();
         for (int i = 0; i < tokens; i++)
         {
-            map[location.x, location.y].SetAverageHeight(true, 3);
+            map[location.x, location.y].SetAverageHeight(true, heightWeight);
             //map[location.x, location.y].SetHeight(1f);
             index = Random.Range(0, map[location.x, location.y].adjacentSquares.Count);
             location.SetNew(map[location.x, location.y].adjacentSquares[index].X(), map[location.x, location.y].adjacentSquares[index].Y());

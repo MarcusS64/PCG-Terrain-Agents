@@ -170,11 +170,14 @@ public class BackupIslandGenerator : MonoBehaviour
             for (int j = 0; j < height; j++)
             {
 
-                if (squares[i, j].SameSorroundingElevation(5) && squares[i, j].GetHeight() >= coastLevel)
-                {
-                    if (Random.Range(0, 100) > 70)
-                        squares = MountainAgent.RiseMountains(i, j, mountainTokens, squares);
-                }
+                //if (squares[i, j].SameSorroundingElevation(5) && squares[i, j].GetHeight() >= coastLevel)
+                //{
+                //    if (Random.Range(0, 100) > 70)
+                //    {
+                //        squares = MountainAgent.RiseMountains(i, j, mountainTokens, squares);
+                //    }
+
+                //}
             }
         }
     }

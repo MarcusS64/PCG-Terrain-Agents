@@ -115,7 +115,7 @@ public static class HillAgent
             tokens--;
             for (int i = 0; i < currentTile.adjacentSquares.Count; i++)
             {
-                if (!currentTile.adjacentSquares[i].queued) //&& !currentTile.adjacentSquares[i].blocked
+                if (!currentTile.adjacentSquares[i].queued) 
                 {
                     myQueue.Enqueue(currentTile.adjacentSquares[i]);                    
                     //currentTile.adjacentSquares[i].SetParent(currentTile);
@@ -130,14 +130,19 @@ public static class HillAgent
                     removeQueue.Add(currentTile.adjacentSquares[i]);                   
                 }
             }
-
-            currentTile.SetHeight(0.5f + WaveFunction(start, currentTile, waveTokens, amplitudes, lambdas, phaseshifts, startingPoints));
+            float hillvalue = WaveFunction(start, currentTile, waveTokens, amplitudes, lambdas, phaseshifts, startingPoints);
+            if(hillvalue > 0)
+            {
+                currentTile.SetHeight(0.5f + hillvalue);
+            }
+            
             //currentTile.AddHeight(WaveFunction(start, currentTile, waveTokens, amplitudes, lambdas)); 
             //Adding heigh required flatten it back out therwide it will just keep growing
             //Debug.Log("Set average height");
         }
 
-        SmoothBorder(myQueue, removeQueue);
+        //BlendBorder(myQueue, removeQueue, waveTokens, amplitudes, lambdas, phaseshifts, startingPoints);
+        SmoothBorder(myQueue, removeQueue, graph);
         foreach (Node node in removeQueue)
         {
             node.queued = false;
@@ -145,7 +150,7 @@ public static class HillAgent
 
     }
 
-    private static void SmoothBorder(Queue<Node> myQueue, List<Node> removeQueue)
+    private static void SmoothBorder(Queue<Node> myQueue, List<Node> removeQueue, Node[,] map)
     {
         int count = 2000;
         while(myQueue.Count > 0 && count > 0)
@@ -154,6 +159,7 @@ public static class HillAgent
             float oldTileHeight = currentTile.GetHeight();
             //currentTile.SetHeight(1);
             currentTile.SetAverageHeight2(false, 1);
+            //SmoothingAgent.Smooth(currentTile.X(), currentTile.Y(), 3, map);
             count--;
             if(Mathf.Abs(oldTileHeight - currentTile.GetHeight()) > 0.0001f) //Height delta
             {
@@ -170,6 +176,36 @@ public static class HillAgent
             }            
         }
 
+    }
+
+    private static void BlendBorder(Queue<Node> myQueue, List<Node> removeQueue, int waveTokens, List<float> amplitudes, List<float> lambdas, List<float> phaseshifts, List<Node> startingPoints)
+    {
+        int count = 4000;
+        while (myQueue.Count > 0 && count > 0)
+        {
+            Node currentTile = myQueue.Dequeue();
+            currentTile.SetHeight(0.5f + WaveFunction(currentTile, currentTile, waveTokens, amplitudes, lambdas, phaseshifts, startingPoints));
+            count--;
+           
+            if(currentTile.GetHeight() - 0.5f > 0.0001f)
+            {
+                for (int i = 0; i < currentTile.adjacentSquares.Count; i++)
+                {
+                    if (!currentTile.adjacentSquares[i].queued)
+                    {
+                        myQueue.Enqueue(currentTile.adjacentSquares[i]);
+
+                        currentTile.adjacentSquares[i].queued = true; //Need to untag the children somehow otherwise they will be blocked
+                        removeQueue.Add(currentTile.adjacentSquares[i]);
+                    }
+                }
+            }
+            
+
+            
+        }
+
+        Debug.Log("loop count at: " + count);
     }
 
     //Use the Queue to add the points by BFS

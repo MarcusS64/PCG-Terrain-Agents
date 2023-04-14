@@ -61,6 +61,13 @@ public class AssignSplatMap : MonoBehaviour
 
                 splatWeights[3] = height * Mathf.Clamp01(height / terrainData.heightmapResolution);
 
+
+                if(height < 0.5f)
+                {
+                    splatWeights[2] = 0.0f;
+                    //splatWeights[1] = 0.0f;
+                }
+
                 // Sum of all textures weights must add to 1, so calculate normalization factor from sum of weights
                 float z = splatWeights.Sum();
 

@@ -57,6 +57,13 @@ public class TerrainEditor : Editor
             generator.ResetTerrain();
         }
 
+        EditorGUILayout.Space();
+        if (GUILayout.Button("Add Noise"))
+        {
+            Debug.Log("Noise added");
+            generator.AddNoise();
+        }
+
         serializedObject.ApplyModifiedProperties();
     }
 
@@ -67,6 +74,8 @@ public class TerrainEditor : Editor
         EditorGUILayout.PropertyField(serializedObject.FindProperty("width"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("height"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("scale"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("maxNoise"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("minNoise"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("vonNeumanNeighbourhood"));
         EditorGUILayout.Space();
 
@@ -102,6 +111,9 @@ public class TerrainEditor : Editor
         EditorGUILayout.Space();
         EditorGUILayout.PropertyField(serializedObject.FindProperty("mountainTokens"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("mountainTurnLimit"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("mountainProbability"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("mountainHeightWeight"));
+        
 
 
         if (GUILayout.Button("Add more mountains"))
