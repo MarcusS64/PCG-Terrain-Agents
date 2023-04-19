@@ -18,6 +18,7 @@ public class IslandGenerator : MonoBehaviour
 
     Node[,] squares;
     public static (int x, int y)[] coords = new (int, int)[] { (-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1) };
+    public static (int x, int y)[] NeumanCoords = new (int, int)[] { (-1, 0), (0, -1), (0, 1), (1, 0) };
     Agent agent;
     [SerializeField] int startTokens;
     [SerializeField] int startX;

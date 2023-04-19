@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,7 +6,8 @@ public static class RiverAgent
     static List<Node> pathList = new List<Node>();
     static Queue<Node> tabooList = new Queue<Node>();
     static float maxDistance;
-    public static (int x, int y)[] directions = new (int, int)[] { (-1, 0), (0, -1), (0, 1), (1, 0) };
+    public static (int x, int y)[] directions = new (int, int)[] { (-1, 0), (0, -1), (1, 0), (0, 1)  };
+    public static bool isHorizontal;
     public static Node[,] GenerateRiver(int tokens, Node[,] map, float coastLimit) //int minimumLength
     {
         maxDistance = Mathf.Sqrt(Mathf.Pow(map.GetLength(0), 2) + Mathf.Pow(map.GetLength(1), 2));
@@ -94,24 +94,29 @@ public static class RiverAgent
         float minDistance = maxDistance;
         float minHeight = 100f;
         bool isTaboo = false;
+        //float currentDistance = Mathf.Sqrt(Mathf.Pow(goal.x - currentNode.X(), 2) + Mathf.Pow(goal.y - currentNode.Y(), 2));
+        int j;
         for (int i = 0; i < currentNode.adjacentSquares.Count; i++)
         {
+            if (isHorizontal) { j = i + currentNode.adjacentSquares.Count / 2; j %= currentNode.adjacentSquares.Count; }
+            else { j = i; }
             foreach(Node node in tabooList)
             {
-                if(node == currentNode.adjacentSquares[i])
+                if(node == currentNode.adjacentSquares[j])
                 {
                     isTaboo = true;
                 }
             }
-            if(currentNode.adjacentSquares[i].GetHeight() <= minHeight && !isTaboo && currentNode.adjacentSquares[i].GetHeight() >= 0.25f && currentNode.adjacentSquares[i].GetHeight() < 0.85f) //Check node with the smallest height
+
+            if (currentNode.adjacentSquares[j].GetHeight() <= minHeight && !isTaboo && currentNode.adjacentSquares[j].GetHeight() >= 0.25f && currentNode.adjacentSquares[j].GetHeight() < 0.85f) //Check node with the smallest height
             {
-                float distance = Mathf.Sqrt(Mathf.Pow(goal.x - currentNode.adjacentSquares[i].X(), 2) + Mathf.Pow(goal.y - currentNode.adjacentSquares[i].Y(), 2)); //Check node closest to the goal point
+                float distance = Mathf.Sqrt(Mathf.Pow(goal.x - currentNode.adjacentSquares[j].X(), 2) + Mathf.Pow(goal.y - currentNode.adjacentSquares[j].Y(), 2)); //Check node closest to the goal point
                 //Debug.Log(distance);
                 if (distance < minDistance)
                 {
-                    minHeight = currentNode.adjacentSquares[i].GetHeight();
+                    minHeight = currentNode.adjacentSquares[j].GetHeight();
                     minDistance = distance;
-                    index = i;
+                    index = j;
                 }
             }
             isTaboo = false;
@@ -126,11 +131,14 @@ public static class RiverAgent
         int axisIndex = Random.Range(0, 4);
         int directionIndex;
         Point start;
-        if (axisIndex == 0) { start = new Point(map.GetLength(0) - 1, borderCoordiante); directionIndex = 0; }
-        else if (axisIndex == 1) { start = new Point(borderCoordiante, map.GetLength(1) - 1); directionIndex = 1; }
-        else if (axisIndex == 2) { start = new Point(borderCoordiante, 0); directionIndex = 2; }
-        else { start = new Point(0, borderCoordiante); directionIndex = 3; }
+        if (axisIndex == 0) { start = new Point(map.GetLength(0) - 1, borderCoordiante); directionIndex = axisIndex; isHorizontal = true; }
+        else if (axisIndex == 1) { start = new Point(borderCoordiante, map.GetLength(1) - 1); directionIndex = axisIndex; isHorizontal = false; }
+        else if (axisIndex == 2) { start = new Point(0, borderCoordiante); directionIndex = axisIndex; isHorizontal = true; }
+        else { start = new Point(borderCoordiante, 0); directionIndex = axisIndex; isHorizontal = false; }
 
+        //start = new Point(map.GetLength(0) - 1, borderCoordiante); directionIndex = 0;
+        //start = new Point(0, borderCoordiante); directionIndex = 3;
+        //start = new Point(borderCoordiante, map.GetLength(1) - 1); directionIndex = 1;
         bool done = false;
         int breakPointCounter = 0;
         while (!done)
@@ -138,7 +146,7 @@ public static class RiverAgent
             for (int i = 0; i < map.GetLength(0); i++)
             {
                 //Debug.Log(start.x + " : " + start.y);
-                if (map[start.x, start.y].GetHeight() >= coastLimit)
+                if (map[start.x, start.y].GetHeight() >= coastLimit && map[start.x, start.y].GetHeight() < 0.7f)
                 {
                     return start;
                 }
@@ -150,17 +158,17 @@ public static class RiverAgent
             start.Reset();
             if(directions[directionIndex].x == 0)
             {
-                start.x += breakPointCounter * (map.GetLength(0) / 5);
+                start.x += breakPointCounter * (map.GetLength(0) / 25);
                 start.x %= map.GetLength(0);
             }
             else
             {
-                start.y += breakPointCounter * (map.GetLength(1) / 5);
+                start.y += breakPointCounter * (map.GetLength(1) / 25);
                 start.y %= map.GetLength(1);
             }
 
 
-            if (breakPointCounter > 5) //
+            if (breakPointCounter > 25) //
             {
                 done = true;
             }
