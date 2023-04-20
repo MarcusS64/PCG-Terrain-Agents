@@ -18,15 +18,17 @@ public static class RiverAgent
             pathList.Clear();
             tabooList.Clear();
             Point location = GetRandomBorderPoint(map, coastLimit);
+            Debug.Log(map[location.x, location.y].GetHeight());
             Point goal = new Point(map.GetLength(0) / 2, map.GetLength(1) / 2);
-            //Debug.Log(goal.x + " : " + goal.y);
+
+            Point goal2 = FindCentreOfHeights(map);
+            Debug.Log("x:" + goal2.x + " y:" + goal2.y);
 
             if (location.x != -1 && location.y != -1)
             {
                 pathList.Add(map[location.x, location.y]);
                 tabooList.Enqueue(map[location.x, location.y]);
                 int index;
-                done = true;
                 for (int i = 0; i < tokens; i++)
                 {
                     //map[location.x, location.y].SetAverageHeight(true, 3);
@@ -136,9 +138,6 @@ public static class RiverAgent
         else if (axisIndex == 2) { start = new Point(0, borderCoordiante); directionIndex = axisIndex; isHorizontal = true; }
         else { start = new Point(borderCoordiante, 0); directionIndex = axisIndex; isHorizontal = false; }
 
-        //start = new Point(map.GetLength(0) - 1, borderCoordiante); directionIndex = 0;
-        //start = new Point(0, borderCoordiante); directionIndex = 3;
-        //start = new Point(borderCoordiante, map.GetLength(1) - 1); directionIndex = 1;
         bool done = false;
         int breakPointCounter = 0;
         while (!done)
@@ -168,7 +167,7 @@ public static class RiverAgent
             }
 
 
-            if (breakPointCounter > 25) //
+            if (breakPointCounter > 25) //How many sub divisions the agent can take along the coast
             {
                 done = true;
             }
@@ -178,5 +177,26 @@ public static class RiverAgent
         Debug.Log("No coast found to make a river");
         return start;
                         
+    }
+
+    private static Point FindCentreOfHeights(Node[,] map)
+    {
+        float hxSum = 0;
+        float hySum = 0;
+        float totalHeight = 0;
+        for (int i = 0; i < map.GetLength(0); i++)
+        {
+            for (int j = 0; j < map.GetLength(1); j++)
+            {
+                hxSum += map[i, j].GetHeight() * i;
+                hySum += map[i, j].GetHeight() * j;
+                totalHeight += map[i, j].GetHeight();
+            }
+        }
+
+        int chX = Mathf.RoundToInt(hxSum / totalHeight);
+        int chY = Mathf.RoundToInt(hySum / totalHeight);
+
+        return new Point(chX, chY);
     }
 }

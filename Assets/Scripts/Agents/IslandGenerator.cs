@@ -310,7 +310,7 @@ public class IslandGenerator : MonoBehaviour
 
     public void onSerializedPropertyChange()
     {
-        Debug.Log("Merker moved");
+        Debug.Log("Marker moved");
         OnAttributeChanged?.Invoke();
     }
 }
