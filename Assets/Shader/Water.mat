@@ -40,7 +40,7 @@ Material:
     - _RippleDensity: 7
     - _RippleSlimness: 5
     - _RippleSpeed: 7
-    - _Tiling: 10
+    - _Tiling: -0.09
     - _WaveSpeed: 0.1
     m_Colors:
     - _BaseColor: {r: 0.2747864, g: 0.4683146, b: 0.8962264, a: 0}

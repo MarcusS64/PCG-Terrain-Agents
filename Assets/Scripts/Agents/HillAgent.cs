@@ -131,7 +131,7 @@ public static class HillAgent
                 }
             }
             float hillvalue = WaveFunction(start, currentTile, waveTokens, amplitudes, lambdas, phaseshifts, startingPoints);
-            if(hillvalue > 0)
+            if(hillvalue > -0.2f)
             {
                 currentTile.SetHeight(0.5f + hillvalue);
             }
@@ -187,7 +187,7 @@ public static class HillAgent
             currentTile.SetHeight(0.5f + WaveFunction(currentTile, currentTile, waveTokens, amplitudes, lambdas, phaseshifts, startingPoints));
             count--;
            
-            if(currentTile.GetHeight() - 0.5f > 0.0001f)
+            if(currentTile.GetHeight() > 0.5f)
             {
                 for (int i = 0; i < currentTile.adjacentSquares.Count; i++)
                 {

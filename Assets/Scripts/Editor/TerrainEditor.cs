@@ -182,6 +182,7 @@ public class TerrainEditor : Editor
         EditorGUILayout.TextField("River Agent parameters");
         EditorGUILayout.PropertyField(serializedObject.FindProperty("riverTokens"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("coastLimit"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("heightLimit"));
 
         if (GUILayout.Button("Add River"))
         {            

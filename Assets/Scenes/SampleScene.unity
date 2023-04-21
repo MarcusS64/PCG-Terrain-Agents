@@ -409,11 +409,11 @@ MeshCollider:
   m_GameObject: {fileID: 294669346}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 4300000, guid: 1344ece2c0de71a4d9b661a649240a68, type: 2}
 --- !u!23 &294669349
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -886,8 +886,8 @@ MonoBehaviour:
   height: 256
   scale: 20
   coastLevel: 0.5
-  maxNoise: 0.05
-  minNoise: -0.05
+  maxNoise: 0.01
+  minNoise: -0.01
   vonNeumanNeighbourhood: 1
   startTokens: 10000
   startX: 100
@@ -897,17 +897,17 @@ MonoBehaviour:
   smoothTokens: 4
   mountainStartX: 120
   mountainStartY: 120
-  mountainTokens: 200
+  mountainTokens: 90
   mountainTurnLimit: 8
-  mountainProbability: 70
-  mountainHeightWeight: 3
+  mountainProbability: 97
+  mountainHeightWeight: 4
   beachStartX: 100
   beachStartY: 100
   beachTokens: 100
   hillStartX: 128
   hillStartY: 128
-  hillTokens: 2000
-  maxHillHeight: 0.1
+  hillTokens: 100
+  maxHillHeight: 0.055
   minHillHeight: 0.05
   hillscale: -20
   hillAreaWidth: 100
@@ -919,6 +919,7 @@ MonoBehaviour:
   minPhaseShift: -0.5
   riverTokens: 100
   coastLimit: 0.5
+  heightLimit: 0.6
 --- !u!154 &740893013
 TerrainCollider:
   m_ObjectHideFlags: 0
@@ -1259,7 +1260,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.3600211, y: -0.000000022701792, z: 0.000000008760571, w: 0.9329442}
+  m_LocalRotation: {x: 0.3600211, y: 0.000000022701792, z: -0.000000008760571, w: 0.9329442}
   m_LocalPosition: {x: 0, y: 76.9, z: -84.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1681,7 +1682,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1328119248}
-  m_LocalRotation: {x: 0.3600211, y: -0.000000022701792, z: 0.000000008760571, w: 0.9329442}
+  m_LocalRotation: {x: 0.3600211, y: 0.000000022701792, z: -0.000000008760571, w: 0.9329442}
   m_LocalPosition: {x: -128, y: 66.9, z: -212.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

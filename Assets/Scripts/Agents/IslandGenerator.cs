@@ -54,6 +54,7 @@ public class IslandGenerator : MonoBehaviour
     [SerializeField] float minPhaseShift = -0.5f;
     [SerializeField] int riverTokens = 10;
     [SerializeField] float coastLimit = 0.5f;
+    [SerializeField] float heightLimit = 0.6f;
 
     Terrain terrain;
     public static event Action OnAttributeChanged;
@@ -250,7 +251,7 @@ public class IslandGenerator : MonoBehaviour
 
     public void AddRiver()
     {
-        squares = RiverAgent.GenerateRiver(riverTokens, squares, coastLimit);
+        squares = RiverAgent.GenerateRiver(riverTokens, squares, coastLimit, heightLimit);
         terrain.terrainData.SetHeights(0, 0, GenerateHeights());
         GetComponent<AssignSplatMap>().UpdateSplatMap();
     }

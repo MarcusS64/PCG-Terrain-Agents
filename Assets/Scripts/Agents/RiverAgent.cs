@@ -8,7 +8,7 @@ public static class RiverAgent
     static float maxDistance;
     public static (int x, int y)[] directions = new (int, int)[] { (-1, 0), (0, -1), (1, 0), (0, 1)  };
     public static bool isHorizontal;
-    public static Node[,] GenerateRiver(int tokens, Node[,] map, float coastLimit) //int minimumLength
+    public static Node[,] GenerateRiver(int tokens, Node[,] map, float coastLimit, float heightLimit) //int minimumLength
     {
         maxDistance = Mathf.Sqrt(Mathf.Pow(map.GetLength(0), 2) + Mathf.Pow(map.GetLength(1), 2));
         bool done = false;
@@ -18,11 +18,10 @@ public static class RiverAgent
             pathList.Clear();
             tabooList.Clear();
             Point location = GetRandomBorderPoint(map, coastLimit);
-            Debug.Log(map[location.x, location.y].GetHeight());
-            Point goal = new Point(map.GetLength(0) / 2, map.GetLength(1) / 2);
+            //Debug.Log(map[location.x, location.y].GetHeight());
+            Point goal = FindCentreOfHeights(map); //new Point(map.GetLength(0) / 2, map.GetLength(1) / 2);
 
-            Point goal2 = FindCentreOfHeights(map);
-            Debug.Log("x:" + goal2.x + " y:" + goal2.y);
+            Debug.Log("x:" + goal.x + " y:" + goal.y);
 
             if (location.x != -1 && location.y != -1)
             {
@@ -33,7 +32,7 @@ public static class RiverAgent
                 {
                     //map[location.x, location.y].SetAverageHeight(true, 3);
                     //map[location.x, location.y].SetHeight(1f);            
-                    index = GetNextNodeIndex(map[location.x, location.y], goal, tabooList, coastLimit);
+                    index = GetNextNodeIndex(map[location.x, location.y], goal, tabooList, heightLimit);
                     if (index < 0)
                     {
                         break;
@@ -75,7 +74,7 @@ public static class RiverAgent
                     {
                         SmoothingAgent.Smooth(node.X(), node.Y(), 4, map);
                     }
-                    Debug.Log("Number of nodes in path:" + pathList.Count);
+                    //Debug.Log("Number of nodes in path:" + pathList.Count);
                 }
                 
             }
@@ -90,7 +89,7 @@ public static class RiverAgent
         return map;
     }
 
-    private static int GetNextNodeIndex(Node currentNode, Point goal, Queue<Node> tabooList, float coastLimit) //Could check for a height limit for the river to climb and stop it sooner
+    private static int GetNextNodeIndex(Node currentNode, Point goal, Queue<Node> tabooList, float heightLimit) //Could check for a height limit for the river to climb and stop it sooner
     {
         int index = -1;
         float minDistance = maxDistance;
@@ -110,7 +109,7 @@ public static class RiverAgent
                 }
             }
 
-            if (currentNode.adjacentSquares[j].GetHeight() <= minHeight && !isTaboo && currentNode.adjacentSquares[j].GetHeight() >= 0.25f && currentNode.adjacentSquares[j].GetHeight() < 0.85f) //Check node with the smallest height
+            if (currentNode.adjacentSquares[j].GetHeight() <= minHeight && !isTaboo && currentNode.adjacentSquares[j].GetHeight() >= 0.25f && currentNode.adjacentSquares[j].GetHeight() < heightLimit) //Check node with the smallest height
             {
                 float distance = Mathf.Sqrt(Mathf.Pow(goal.x - currentNode.adjacentSquares[j].X(), 2) + Mathf.Pow(goal.y - currentNode.adjacentSquares[j].Y(), 2)); //Check node closest to the goal point
                 //Debug.Log(distance);
