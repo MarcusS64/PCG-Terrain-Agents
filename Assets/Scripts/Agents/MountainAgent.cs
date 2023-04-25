@@ -87,4 +87,64 @@ public static class MountainAgent
         }
         return map;
     }
+
+    public static Node[,] StartMountainChain(int startX, int startY, int tokens, Node[,] map, int heightWeight, float coastLevel, float maxNoise)
+    {
+        Point location = new Point(startX, startY);
+        int index;
+        List<Node> removeQueue = new List<Node>();
+
+        while(tokens > 0)
+        {
+            tokens--;
+            removeQueue.Clear();
+            for (int i = 0; i < 90; i++) //tokens
+            {
+                map[location.x, location.y].SetAverageHeight(true, heightWeight);
+                index = Random.Range(0, map[location.x, location.y].adjacentSquares.Count);
+                location.SetNew(map[location.x, location.y].adjacentSquares[index].X(), map[location.x, location.y].adjacentSquares[index].Y());
+            }
+
+            Stack<Node> myStack = new Stack<Node>();
+
+            myStack.Push(map[location.x, location.y]);
+            int breakPoint = 0;
+            while (myStack.Count > 0 && breakPoint < 50)
+            {
+                Node currentTile = myStack.Pop();
+                currentTile.queued = true;
+                removeQueue.Add(currentTile);
+                if (currentTile.GetHeight() <= coastLevel + 0.1f + maxNoise && currentTile.SameSorroundingElevation(5, maxNoise)) 
+                {
+                    location.SetNew(currentTile.X(), currentTile.Y());
+                    //RetracePath(start, goal);
+                    break;
+                }
+
+                foreach (Node tile in currentTile.adjacentSquares)
+                {
+                    if (tile.queued)
+                    {
+                        continue;
+                    }
+                    if (tile.GetHeight() >= 0.5f)
+                    {
+                        //tile.SetParent(currentTile);
+                        myStack.Push(tile);
+                    }
+                }
+                breakPoint++;
+                if(breakPoint >= 50)
+                {
+                    Debug.Log("Mountain while loop breakPoint triggered!");
+                }
+            }
+            foreach (Node item in removeQueue)
+            {
+                item.queued = false;
+            }
+        }
+        
+        return map;
+    }
 }

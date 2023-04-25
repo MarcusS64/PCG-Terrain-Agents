@@ -221,8 +221,8 @@ public class IslandGenerator : MonoBehaviour
 
     public void GenerateMountains()
     {
-        squares = MountainAgent.MountainGenerate(mountainStartX, mountainStartY, mountainTokens, squares, mountainTurnLimit);
-
+        //squares = MountainAgent.MountainGenerate(mountainStartX, mountainStartY, mountainTokens, squares, mountainTurnLimit);
+        squares = MountainAgent.StartMountainChain(mountainStartX, mountainStartY, mountainTokens, squares, mountainHeightWeight, coastLevel, maxNoise);
         terrain.terrainData.SetHeights(0, 0, GenerateHeights());
         GetComponent<AssignSplatMap>().UpdateSplatMap();
     }

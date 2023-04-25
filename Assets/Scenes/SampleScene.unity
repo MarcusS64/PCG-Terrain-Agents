@@ -895,12 +895,12 @@ MonoBehaviour:
   limit: 8
   numberOfChildren: 2
   smoothTokens: 4
-  mountainStartX: 120
-  mountainStartY: 120
-  mountainTokens: 90
+  mountainStartX: 128
+  mountainStartY: 128
+  mountainTokens: 5
   mountainTurnLimit: 8
   mountainProbability: 97
-  mountainHeightWeight: 4
+  mountainHeightWeight: 3
   beachStartX: 100
   beachStartY: 100
   beachTokens: 100

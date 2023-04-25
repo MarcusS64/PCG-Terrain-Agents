@@ -122,6 +122,13 @@ public class TerrainEditor : Editor
             generator.RaiseMountains();
             //generator.GenerateMountains();
         }
+
+        if(GUILayout.Button("Add Mountains"))
+        {
+            
+            generator.GenerateMountains();
+            Debug.Log("Try to Generate mountains");
+        }
     }
 
     public void DisplaySmoothingAgentInfo()

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public static class RiverAgent
@@ -95,33 +96,63 @@ public static class RiverAgent
         float minDistance = maxDistance;
         float minHeight = 100f;
         bool isTaboo = false;
-        //float currentDistance = Mathf.Sqrt(Mathf.Pow(goal.x - currentNode.X(), 2) + Mathf.Pow(goal.y - currentNode.Y(), 2));
+        float currentDistance = Mathf.Sqrt(Mathf.Pow(goal.x - currentNode.X(), 2) + Mathf.Pow(goal.y - currentNode.Y(), 2));
+        Dictionary<int, Node> nodesCloseToGoal = new Dictionary<int, Node>();
         int j;
-        for (int i = 0; i < currentNode.adjacentSquares.Count; i++)
+        //Debug.Log(Mathf.Sqrt(Mathf.Pow(currentNode.adjacentSquares[0].X() - currentNode.X(), 2) + Mathf.Pow(currentNode.adjacentSquares[0].X() - currentNode.Y(), 2)));
+        if(currentNode.SameSorroundingElevation(1, 0)) //For if the ground is flat
         {
-            if (isHorizontal) { j = i + currentNode.adjacentSquares.Count / 2; j %= currentNode.adjacentSquares.Count; }
-            else { j = i; }
-            foreach(Node node in tabooList)
-            {
-                if(node == currentNode.adjacentSquares[j])
+            //index = Random.Range(0, currentNode.adjacentSquares.Count);
+            for (int i = 0; i < currentNode.adjacentSquares.Count; i++)
+            {        
+                float nodeDistanceToGoal = Mathf.Sqrt(Mathf.Pow(goal.x - currentNode.adjacentSquares[i].X(), 2) + Mathf.Pow(goal.y - currentNode.adjacentSquares[i].Y(), 2));
+                foreach (Node node in tabooList)
                 {
-                    isTaboo = true;
+                    if (node == currentNode.adjacentSquares[i])
+                    {
+                        isTaboo = true;
+                        break;
+                    }
                 }
-            }
 
-            if (currentNode.adjacentSquares[j].GetHeight() <= minHeight && !isTaboo && currentNode.adjacentSquares[j].GetHeight() >= 0.25f && currentNode.adjacentSquares[j].GetHeight() < heightLimit) //Check node with the smallest height
-            {
-                float distance = Mathf.Sqrt(Mathf.Pow(goal.x - currentNode.adjacentSquares[j].X(), 2) + Mathf.Pow(goal.y - currentNode.adjacentSquares[j].Y(), 2)); //Check node closest to the goal point
-                //Debug.Log(distance);
-                if (distance < minDistance)
+                if (!isTaboo && currentDistance > nodeDistanceToGoal)
                 {
-                    minHeight = currentNode.adjacentSquares[j].GetHeight();
-                    minDistance = distance;
-                    index = j;
+                    nodesCloseToGoal.Add(i, currentNode.adjacentSquares[i]);
                 }
+                isTaboo = false;
             }
-            isTaboo = false;
+            Debug.Log("Number of nodes closer to the goal in dictionary: " + nodesCloseToGoal.Count);
+            index = nodesCloseToGoal.ElementAt(Random.Range(0, nodesCloseToGoal.Count)).Key;
         }
+        else
+        {
+            for (int i = 0; i < currentNode.adjacentSquares.Count; i++)
+            {
+                if (isHorizontal) { j = i + currentNode.adjacentSquares.Count / 2; j %= currentNode.adjacentSquares.Count; }
+                else { j = i; }
+                foreach (Node node in tabooList)
+                {
+                    if (node == currentNode.adjacentSquares[j])
+                    {
+                        isTaboo = true;
+                    }
+                }
+
+                if (currentNode.adjacentSquares[j].GetHeight() <= minHeight && !isTaboo && currentNode.adjacentSquares[j].GetHeight() >= 0.25f && currentNode.adjacentSquares[j].GetHeight() < heightLimit) //Check node with the smallest height
+                {
+                    float distance = Mathf.Sqrt(Mathf.Pow(goal.x - currentNode.adjacentSquares[j].X(), 2) + Mathf.Pow(goal.y - currentNode.adjacentSquares[j].Y(), 2)); //Check node closest to the goal point
+                                                                                                                                                                        //Debug.Log(distance);
+                    if (distance < minDistance)
+                    {
+                        minHeight = currentNode.adjacentSquares[j].GetHeight();
+                        minDistance = distance;
+                        index = j;
+                    }
+                }
+                isTaboo = false;
+            }
+        }
+        
 
         return index;
     }
