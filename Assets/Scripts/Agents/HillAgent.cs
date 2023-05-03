@@ -13,18 +13,18 @@ public static class HillAgent
     public static float hillHeight = 0.5f;
     public static float lambda;
 
-    public static Node[,] GenerateHills(int startX, int startY, Node[,] map, float maxHeight, float minHeight, int hillTokens, float maxlambda, float minlambda, int waveTokens, float maxPhaseShift, float minPhaseShift) 
+    public static Node[,] GenerateHills(int startX, int startY, Node[,] map, float maxHeight, float minHeight, int hillTokens, float maxlambda, float minlambda, int waveTokens, float maxPhaseShift, float minPhaseShift, float coastLimit) 
     {
         hillHeight = Random.Range(minHeight, maxHeight);
         Point location = new Point(startX, startY);
         //(int x, int y) travelDirection = directions[Random.Range(0, directions.Length)];
         //Vector3 direction = new Vector3(travelDirection.x, 0, travelDirection.y);
         //map[startX, startY].SetHeight(2.0f); //We set this in PathFinding() during the first loop
-        Debug.Log("Hill peak lifted. Hill tokens count is: " + hillTokens);
+        //Debug.Log("Hill peak lifted. Hill tokens count is: " + hillTokens);
         //Do Pathfinding for a number of peaks specified by the user around the area.
         //Take a random point around the hill and do antoher hill there 
         //Sidenote: stop the hill egeration when the height hits the same height as it already has (somehow)
-        PathFinding(map, map[startX, startY], hillTokens, maxHeight, minHeight, waveTokens, maxlambda, minlambda, maxPhaseShift, minPhaseShift); //map[startX + radius, startY + radius]
+        PathFinding(map, map[startX, startY], hillTokens, maxHeight, minHeight, waveTokens, maxlambda, minlambda, maxPhaseShift, minPhaseShift, coastLimit); //map[startX + radius, startY + radius]
                                                                                                                                                  //map[location.x, location.y].SetHeight(hillHeight);
         return map;
     }
@@ -88,14 +88,14 @@ public static class HillAgent
     public static List<Node> removeQueue = new List<Node>();
 
     public static void PathFinding(Node[,] graph, Node start, int tokens, float maxHeight, float minHeight, 
-        int waveTokens, float maxlambda, float minlambda, float maxPhaseShift, float minPhaseShift)
+        int waveTokens, float maxlambda, float minlambda, float maxPhaseShift, float minPhaseShift, float coastLimit)
     {
         myQueue.Clear();
         myQueue.Enqueue(start);
         start.queued = true;
         removeQueue.Clear();
         removeQueue.Add(start);
-        Debug.Log("Queue count is: " + myQueue.Count);
+        //Debug.Log("Queue count is: " + myQueue.Count);
 
         List<float> amplitudes = new List<float>();
         List<float> lambdas = new List<float>();
@@ -130,19 +130,20 @@ public static class HillAgent
                     removeQueue.Add(currentTile.adjacentSquares[i]);                   
                 }
             }
-            float hillvalue = WaveFunction(start, currentTile, waveTokens, amplitudes, lambdas, phaseshifts, startingPoints);
-            if(hillvalue > -0.2f)
-            {
-                currentTile.SetHeight(0.5f + hillvalue);
-            }
-            
+            float waveValue = WaveFunction(start, currentTile, waveTokens, amplitudes, lambdas, phaseshifts, startingPoints);
+            //if(waveValue > -0.2f)
+            //{
+            //    currentTile.SetHeight(0.5f + waveValue);
+            //}
+            currentTile.SetHeight(coastLimit + waveValue);
             //currentTile.AddHeight(WaveFunction(start, currentTile, waveTokens, amplitudes, lambdas)); 
             //Adding heigh required flatten it back out therwide it will just keep growing
             //Debug.Log("Set average height");
         }
 
-        //BlendBorder(myQueue, removeQueue, waveTokens, amplitudes, lambdas, phaseshifts, startingPoints);
-        SmoothBorder(myQueue, removeQueue, graph);
+        BlendBorder(myQueue, removeQueue, waveTokens, amplitudes, lambdas, phaseshifts, startingPoints, start, coastLimit);
+        //SmoothBorder(myQueue, removeQueue, graph);
+        //DampBorder(myQueue, removeQueue, graph, coastLimit, start);
         foreach (Node node in removeQueue)
         {
             node.queued = false;
@@ -178,25 +179,70 @@ public static class HillAgent
 
     }
 
-    private static void BlendBorder(Queue<Node> myQueue, List<Node> removeQueue, int waveTokens, List<float> amplitudes, List<float> lambdas, List<float> phaseshifts, List<Node> startingPoints)
+    private static void DampBorder(Queue<Node> myQueue, List<Node> removeQueue, Node[,] map, float coastLevel, Node start)
     {
-        int count = 4000;
-        while (myQueue.Count > 0 && count > 0)
+        int loopCount = 2000;
+        float minDistanceFromStart = Mathf.Sqrt(Mathf.Pow(start.X() - myQueue.Peek().X(), 2) + Mathf.Pow(start.Y() - myQueue.Peek().Y(), 2));
+        while (myQueue.Count > 0 && loopCount > 0)
         {
-            Node currentTile = myQueue.Dequeue();
-            currentTile.SetHeight(0.5f + WaveFunction(currentTile, currentTile, waveTokens, amplitudes, lambdas, phaseshifts, startingPoints));
-            count--;
-           
-            if(currentTile.GetHeight() > 0.5f)
+            Node currentNode = myQueue.Dequeue();
+            float oldHeight = currentNode.GetHeight();
+            
+            float distanceFromStart = Mathf.Sqrt(Mathf.Pow(start.X() - currentNode.X(), 2) + Mathf.Pow(start.Y() - currentNode.Y(), 2));
+            float newHeight = Mathf.Abs(oldHeight - coastLevel) * (minDistanceFromStart / distanceFromStart);
+            currentNode.SetHeight(coastLevel + newHeight);
+            //currentTile.SetAverageHeight2(false, 1);
+            //SmoothingAgent.Smooth(currentTile.X(), currentTile.Y(), 3, map);
+            loopCount--;
+            if (Mathf.Abs(oldHeight - currentNode.GetHeight()) > 0.00001f) //Height delta
             {
-                for (int i = 0; i < currentTile.adjacentSquares.Count; i++)
+                for (int i = 0; i < currentNode.adjacentSquares.Count; i++)
                 {
-                    if (!currentTile.adjacentSquares[i].queued)
+                    if (!currentNode.adjacentSquares[i].queued)
                     {
-                        myQueue.Enqueue(currentTile.adjacentSquares[i]);
+                        myQueue.Enqueue(currentNode.adjacentSquares[i]);
 
-                        currentTile.adjacentSquares[i].queued = true; //Need to untag the children somehow otherwise they will be blocked
-                        removeQueue.Add(currentTile.adjacentSquares[i]);
+                        currentNode.adjacentSquares[i].queued = true; //Need to untag the children somehow otherwise they will be blocked
+                        removeQueue.Add(currentNode.adjacentSquares[i]);
+                    }
+                }
+            }
+        }
+        Debug.Log("loop count at: " + loopCount);
+    }
+
+    private static void BlendBorder(Queue<Node> myQueue, List<Node> removeQueue, int waveTokens, List<float> amplitudes, List<float> lambdas, List<float> phaseshifts, List<Node> startingPoints, Node start, float coastLimit)
+    {
+        int loopCount = 4000;
+
+        float minDistanceFromStart = Mathf.Sqrt(Mathf.Pow(start.X() - myQueue.Peek().X(), 2) + Mathf.Pow(start.Y() - myQueue.Peek().Y(), 2));
+        while (myQueue.Count > 0 && loopCount > 0)
+        {
+            Node currentNode = myQueue.Dequeue();
+            float distanceFromStart = Mathf.Sqrt(Mathf.Pow(start.X() - currentNode.X(), 2) + Mathf.Pow(start.Y() - currentNode.Y(), 2));
+            //Debug.Log(distanceFromStart);
+            //+ WaveFunction(currentTile, currentTile, waveTokens, amplitudes, lambdas, phaseshifts, startingPoints)
+            List<float> newAmplitudes = new List<float>();
+
+            foreach (float amplitude in amplitudes)
+            {
+                newAmplitudes.Add(amplitude * (minDistanceFromStart / (distanceFromStart)));
+            }
+            //Debug.Log("First new amplitude: " + newAmplitudes[0]);
+            float newHeight = WaveFunction(currentNode, currentNode, waveTokens, newAmplitudes, lambdas, phaseshifts, startingPoints);
+            currentNode.SetHeight(coastLimit + newHeight);
+            loopCount--;
+           
+            if(Mathf.Abs(currentNode.GetHeight() - coastLimit) > 0.01f)
+            {
+                for (int i = 0; i < currentNode.adjacentSquares.Count; i++)
+                {
+                    if (!currentNode.adjacentSquares[i].queued && currentNode.adjacentSquares[i].GetHeight() >= 0.1f) //&& currentNode.adjacentSquares[i].GetHeight() >= coastLimit
+                    {
+                        myQueue.Enqueue(currentNode.adjacentSquares[i]);
+
+                        currentNode.adjacentSquares[i].queued = true; //Need to untag the children somehow otherwise they will be blocked
+                        removeQueue.Add(currentNode.adjacentSquares[i]);
                     }
                 }
             }
@@ -205,7 +251,7 @@ public static class HillAgent
             
         }
 
-        Debug.Log("loop count at: " + count);
+        Debug.Log("loop count at: " + loopCount);
     }
 
     //Use the Queue to add the points by BFS

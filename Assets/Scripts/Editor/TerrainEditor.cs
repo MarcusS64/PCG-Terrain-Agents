@@ -9,7 +9,8 @@ public class TerrainEditor : Editor
 {
     public enum DisplayCategory
     {
-        Coast, Mountain, Smoothing, Beach, Hill, River, Test
+        Map, Coast, Mountain, Smoothing, Hill, River, Test
+        //Beach
     }
 
     public DisplayCategory categoryToDisplay;
@@ -25,6 +26,9 @@ public class TerrainEditor : Editor
 
         switch (categoryToDisplay)
         {
+            case DisplayCategory.Map:
+                DisplayMapInfo();
+                break;
             case DisplayCategory.Coast:
                 DisplayCoastAgentInfo();
                 break;
@@ -34,9 +38,9 @@ public class TerrainEditor : Editor
             case DisplayCategory.Smoothing:
                 DisplaySmoothingAgentInfo();
                 break;
-            case DisplayCategory.Beach:
-                DisplayBeachAgentInfo();
-                break;
+            //case DisplayCategory.Beach:
+            //    DisplayBeachAgentInfo();
+            //    break;
             case DisplayCategory.Hill:
                 DisplayHillAgentInfo();
                 break;
@@ -51,7 +55,9 @@ public class TerrainEditor : Editor
         }
 
         EditorGUILayout.Space();
-        if (GUILayout.Button("Reset terrain"))
+        EditorGUILayout.BeginHorizontal();
+        
+        if (GUILayout.Button("Reset terrain", ))
         {
             Debug.Log("Terrain reset");
             generator.ResetTerrain();
@@ -63,36 +69,40 @@ public class TerrainEditor : Editor
             Debug.Log("Noise added");
             generator.AddNoise();
         }
+        EditorGUILayout.EndHorizontal();
 
         serializedObject.ApplyModifiedProperties();
     }
 
-    public void DisplayCoastAgentInfo()
+    public void DisplayMapInfo()
     {
         EditorGUILayout.TextField("Map layout");
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("depth"));
+        //EditorGUILayout.PropertyField(serializedObject.FindProperty("depth"));
+        
         EditorGUILayout.PropertyField(serializedObject.FindProperty("width"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("height"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("scale"));
+        //EditorGUILayout.PropertyField(serializedObject.FindProperty("scale"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("maxNoise"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("minNoise"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("vonNeumanNeighbourhood"));
         EditorGUILayout.Space();
 
-        if(GUILayout.Button("Apply map properties"))
+        if (GUILayout.Button("Apply map properties"))
         {
             Debug.Log("Map parameters saved");
             generator.ApplyNewMapParameters();
         }
-            
+    }
+
+    public void DisplayCoastAgentInfo()
+    {                   
         EditorGUILayout.TextField("Coast Agent parameters");        
         EditorGUILayout.PropertyField(serializedObject.FindProperty("coastLevel"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("startTokens"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("startX"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("startY"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("limit"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("numberOfChildren"));
-
+        //EditorGUILayout.PropertyField(serializedObject.FindProperty("numberOfChildren"));
         
         if(GUILayout.Button("Generate coast"))
         {
@@ -106,26 +116,24 @@ public class TerrainEditor : Editor
     public void DisplayMountainAgentInfo()
     {
         EditorGUILayout.TextField("Mountain Agent parameters");
+        EditorGUILayout.Space();
+        EditorGUILayout.TextField("Generate mountains over whole coast");
         EditorGUILayout.PropertyField(serializedObject.FindProperty("mountainStartX"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("mountainStartY"));
+        if (GUILayout.Button("Add mountains over whole coast"))
+        {
+            generator.RaiseMountains();
+            Debug.Log("Try to Generate mountains");
+        }
+
+        EditorGUILayout.TextField("Add single mountain chain");
         EditorGUILayout.Space();
         EditorGUILayout.PropertyField(serializedObject.FindProperty("mountainTokens"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("mountainTurnLimit"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("mountainProbability"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("mountainHeightWeight"));
         
-
-
-        if (GUILayout.Button("Add more mountains"))
-        {
-            Debug.Log("Try to Generate mountains");
-            generator.RaiseMountains();
-            //generator.GenerateMountains();
-        }
-
-        if(GUILayout.Button("Add Mountains"))
-        {
-            
+        if(GUILayout.Button("Add mountain chain"))
+        {           
             generator.GenerateMountains();
             Debug.Log("Try to Generate mountains");
         }
@@ -165,17 +173,14 @@ public class TerrainEditor : Editor
         EditorGUILayout.PropertyField(serializedObject.FindProperty("hillTokens"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("maxHillHeight"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("minHillHeight"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("hillscale"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("hillAreaWidth"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("hillAreaLength"));
         EditorGUILayout.Space();
 
         EditorGUILayout.TextField("Wave parameters");
         EditorGUILayout.PropertyField(serializedObject.FindProperty("maxlambda"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("minlambda"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("waveTokens"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("minlambda"));        
         EditorGUILayout.PropertyField(serializedObject.FindProperty("maxPhaseShift"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("minPhaseShift"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("numberOfWaves"));
 
         if (GUILayout.Button("Generate Hills"))
         {

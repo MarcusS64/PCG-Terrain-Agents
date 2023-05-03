@@ -103,6 +103,7 @@ public static class RiverAgent
         if(currentNode.SameSorroundingElevation(1, 0)) //For if the ground is flat
         {
             //index = Random.Range(0, currentNode.adjacentSquares.Count);
+            WeightedRandomList<int> nodeWeights = new WeightedRandomList<int>();
             for (int i = 0; i < currentNode.adjacentSquares.Count; i++)
             {        
                 float nodeDistanceToGoal = Mathf.Sqrt(Mathf.Pow(goal.x - currentNode.adjacentSquares[i].X(), 2) + Mathf.Pow(goal.y - currentNode.adjacentSquares[i].Y(), 2));
@@ -115,14 +116,17 @@ public static class RiverAgent
                     }
                 }
 
-                if (!isTaboo && currentDistance > nodeDistanceToGoal)
+                if (!isTaboo) //&& currentDistance > nodeDistanceToGoal
                 {
-                    nodesCloseToGoal.Add(i, currentNode.adjacentSquares[i]);
+                    //nodesCloseToGoal.Add(i, currentNode.adjacentSquares[i]);
+                    nodeWeights.Add(i, 2 * currentDistance / nodeDistanceToGoal);
                 }
                 isTaboo = false;
             }
-            Debug.Log("Number of nodes closer to the goal in dictionary: " + nodesCloseToGoal.Count);
-            index = nodesCloseToGoal.ElementAt(Random.Range(0, nodesCloseToGoal.Count)).Key;
+            //Debug.Log("Number of nodes closer to the goal in dictionary: " + nodesCloseToGoal.Count);
+            Debug.Log("Number of nodes closer to the goal in weightedRandomList: " + nodeWeights.list.Count);
+            //index = nodesCloseToGoal.ElementAt(Random.Range(0, nodesCloseToGoal.Count)).Key;
+            index = nodeWeights.GetRandom();
         }
         else
         {

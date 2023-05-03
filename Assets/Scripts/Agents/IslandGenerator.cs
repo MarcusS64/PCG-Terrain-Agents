@@ -7,10 +7,10 @@ using System;
 public enum AgentType { Coast, SmoothCoast, Mountain, Beach }
 public class IslandGenerator : MonoBehaviour
 {
-    public int depth = 20;
+    public int depth = 20; //Only used in one place and might be omitted
     public int width = 256;
     public int height = 256;
-    public float scale = 20f;
+    public float scale = 20f; //Not used but could set the scale for the map
     [SerializeField] float coastLevel;
     [SerializeField] float maxNoise = 0.01f;
     [SerializeField] float minNoise = - 0.01f;
@@ -44,12 +44,10 @@ public class IslandGenerator : MonoBehaviour
     [SerializeField] int hillTokens = 10;
     [SerializeField] float maxHillHeight = 0.8f;
     [SerializeField] float minHillHeight = 0.6f;
-    [SerializeField] float hillscale = -20f;
-    [SerializeField] int hillAreaWidth = 100;
-    [SerializeField] int hillAreaLength = 100;
     [SerializeField] float maxlambda = 20.0f;
     [SerializeField] float minlambda = 10.0f;
-    [SerializeField] int waveTokens = 2;
+    [Tooltip("Health value between 0 and 100.")]
+    [SerializeField] int numberOfWaves = 2;
     [SerializeField] float maxPhaseShift = 0.5f;
     [SerializeField] float minPhaseShift = -0.5f;
     [SerializeField] int riverTokens = 10;
@@ -124,7 +122,6 @@ public class IslandGenerator : MonoBehaviour
     float[,] GenerateHeights() //Height values for the map
     {
         float[,] heights = new float[width, height];
-
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height; j++) //Could check for changed values to make it faster perhaps
@@ -237,7 +234,7 @@ public class IslandGenerator : MonoBehaviour
     public void BuildHills()
     {
         //squares = HillAgent.PerlinHills(hillStartX, hillStartY, squares, hillAreaWidth, hillAreaLength, scale);
-        squares = HillAgent.GenerateHills(hillStartX, hillStartY, squares, maxHillHeight, minHillHeight, hillTokens, maxlambda, minlambda, waveTokens, maxPhaseShift, minPhaseShift);
+        squares = HillAgent.GenerateHills(hillStartX, hillStartY, squares, maxHillHeight, minHillHeight, hillTokens, maxlambda, minlambda, numberOfWaves, maxPhaseShift, minPhaseShift, coastLimit);
         terrain.terrainData.SetHeights(0, 0, GenerateHeights());
         GetComponent<AssignSplatMap>().UpdateSplatMap();
     }
