@@ -386,7 +386,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &294669347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -909,12 +909,9 @@ MonoBehaviour:
   hillTokens: 100
   maxHillHeight: 0.055
   minHillHeight: 0.05
-  hillscale: -20
-  hillAreaWidth: 100
-  hillAreaLength: 100
   maxlambda: 20
   minlambda: 10
-  waveTokens: 3
+  numberOfWaves: 2
   maxPhaseShift: 0.5
   minPhaseShift: -0.5
   riverTokens: 100

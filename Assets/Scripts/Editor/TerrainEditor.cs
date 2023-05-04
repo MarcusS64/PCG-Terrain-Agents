@@ -57,7 +57,7 @@ public class TerrainEditor : Editor
         EditorGUILayout.Space();
         EditorGUILayout.BeginHorizontal();
         
-        if (GUILayout.Button("Reset terrain", ))
+        if (GUILayout.Button("Reset terrain"))
         {
             Debug.Log("Terrain reset");
             generator.ResetTerrain();
@@ -76,7 +76,7 @@ public class TerrainEditor : Editor
 
     public void DisplayMapInfo()
     {
-        EditorGUILayout.TextField("Map layout");
+        EditorGUILayout.TextField("Map properties");
         //EditorGUILayout.PropertyField(serializedObject.FindProperty("depth"));
         
         EditorGUILayout.PropertyField(serializedObject.FindProperty("width"));
