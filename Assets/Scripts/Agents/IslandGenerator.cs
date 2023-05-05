@@ -23,15 +23,17 @@ public class IslandGenerator : MonoBehaviour
     [SerializeField] int startTokens;
     [SerializeField] int startX;
     [SerializeField] int startY;
-    [SerializeField] int limit;
-    [SerializeField] int numberOfChildren;
+    [SerializeField] int childTokenLimit = 8;
+    [SerializeField] int numberOfChildren = 2;
     [SerializeField] int smoothTokens;
+    [SerializeField] bool useStartGiven = true;
     [SerializeField] int mountainStartX;
     [SerializeField] int mountainStartY;
     [SerializeField] int mountainTokens;
     [SerializeField] int mountainTurnLimit;
     [SerializeField] int mountainProbability;
     [SerializeField] int mountainHeightWeight;
+    [SerializeField] bool alowHillValleys = true;
     [SerializeField] int beachStartX;
     [SerializeField] int beachStartY;
     [SerializeField] int beachTokens;
@@ -51,7 +53,6 @@ public class IslandGenerator : MonoBehaviour
     [SerializeField] float maxPhaseShift = 0.5f;
     [SerializeField] float minPhaseShift = -0.5f;
     [SerializeField] int riverTokens = 10;
-    [SerializeField] float coastLimit = 0.5f;
     [SerializeField] float heightLimit = 0.6f;
 
     Terrain terrain;
@@ -112,7 +113,7 @@ public class IslandGenerator : MonoBehaviour
         terrainData.size = new Vector3(width, depth, height);
 
         CoastalAgent.SetSquaresMap(squares);
-        CoastalAgent.CoastLineGenerate(agent, numberOfChildren, limit);
+        CoastalAgent.CoastLineGenerate(agent, numberOfChildren, childTokenLimit);
         squares = CoastalAgent.ReturnCoast();
 
         terrainData.SetHeights(0, 0, GenerateHeights()); //Takes the height map array values to set the heights of the terrain
@@ -219,7 +220,7 @@ public class IslandGenerator : MonoBehaviour
     public void GenerateMountains()
     {
         //squares = MountainAgent.MountainGenerate(mountainStartX, mountainStartY, mountainTokens, squares, mountainTurnLimit);
-        squares = MountainAgent.StartMountainChain(mountainStartX, mountainStartY, mountainTokens, squares, mountainHeightWeight, coastLevel, maxNoise);
+        squares = MountainAgent.StartMountainChain(mountainStartX, mountainStartY, mountainTokens, squares, mountainHeightWeight, coastLevel, maxNoise, useStartGiven);
         terrain.terrainData.SetHeights(0, 0, GenerateHeights());
         GetComponent<AssignSplatMap>().UpdateSplatMap();
     }
@@ -234,7 +235,7 @@ public class IslandGenerator : MonoBehaviour
     public void BuildHills()
     {
         //squares = HillAgent.PerlinHills(hillStartX, hillStartY, squares, hillAreaWidth, hillAreaLength, scale);
-        squares = HillAgent.GenerateHills(hillStartX, hillStartY, squares, maxHillHeight, minHillHeight, hillTokens, maxlambda, minlambda, numberOfWaves, maxPhaseShift, minPhaseShift, coastLimit);
+        squares = HillAgent.GenerateHills(hillStartX, hillStartY, squares, maxHillHeight, minHillHeight, hillTokens, maxlambda, minlambda, numberOfWaves, maxPhaseShift, minPhaseShift, coastLevel, alowHillValleys);
         terrain.terrainData.SetHeights(0, 0, GenerateHeights());
         GetComponent<AssignSplatMap>().UpdateSplatMap();
     }
@@ -248,7 +249,7 @@ public class IslandGenerator : MonoBehaviour
 
     public void AddRiver()
     {
-        squares = RiverAgent.GenerateRiver(riverTokens, squares, coastLimit, heightLimit);
+        squares = RiverAgent.GenerateRiver(riverTokens, squares, coastLevel, heightLimit);
         terrain.terrainData.SetHeights(0, 0, GenerateHeights());
         GetComponent<AssignSplatMap>().UpdateSplatMap();
     }

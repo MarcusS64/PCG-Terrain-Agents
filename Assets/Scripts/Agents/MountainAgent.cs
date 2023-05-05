@@ -73,7 +73,7 @@ public static class MountainAgent
         return v;
     }
 
-    public static Node[,] RiseMountains(int startX, int startY, int tokens, Node[,] map, int heightWeight)
+    public static Node[,] RiseMountains(int startX, int startY, int tokens, Node[,] map, int heightWeight) //Actually used
     {
         Point location = new Point(startX, startY);
         int index;
@@ -88,9 +88,15 @@ public static class MountainAgent
         return map;
     }
 
-    public static Node[,] StartMountainChain(int startX, int startY, int tokens, Node[,] map, int heightWeight, float coastLevel, float maxNoise)
+    public static Node[,] StartMountainChain(int startX, int startY, int tokens, Node[,] map, int heightWeight, float coastLevel, float maxNoise, bool useStartGiven) //Actually used
     {
         Point location = new Point(startX, startY);
+        if (!useStartGiven)
+        {
+            location = RiverAgent.FindCentreOfHeights(map);
+        }
+
+        
         int index;
         List<Node> removeQueue = new List<Node>();
 

@@ -101,7 +101,7 @@ public class TerrainEditor : Editor
         EditorGUILayout.PropertyField(serializedObject.FindProperty("startTokens"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("startX"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("startY"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("limit"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("childTokenLimit"));
         //EditorGUILayout.PropertyField(serializedObject.FindProperty("numberOfChildren"));
         
         if(GUILayout.Button("Generate coast"))
@@ -116,10 +116,11 @@ public class TerrainEditor : Editor
     public void DisplayMountainAgentInfo()
     {
         EditorGUILayout.TextField("Mountain Agent parameters");
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("mountainTokens"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("mountainHeightWeight"));
         EditorGUILayout.Space();
         EditorGUILayout.TextField("Generate mountains over whole coast");
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("mountainStartX"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("mountainStartY"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("mountainProbability"));
         if (GUILayout.Button("Add mountains over whole coast"))
         {
             generator.RaiseMountains();
@@ -128,11 +129,11 @@ public class TerrainEditor : Editor
 
         EditorGUILayout.TextField("Add single mountain chain");
         EditorGUILayout.Space();
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("mountainTokens"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("mountainProbability"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("mountainHeightWeight"));
-        
-        if(GUILayout.Button("Add mountain chain"))
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("mountainStartX"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("mountainStartY"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("useStartGiven"));
+
+        if (GUILayout.Button("Add mountain chain"))
         {           
             generator.GenerateMountains();
             Debug.Log("Try to Generate mountains");
@@ -173,6 +174,7 @@ public class TerrainEditor : Editor
         EditorGUILayout.PropertyField(serializedObject.FindProperty("hillTokens"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("maxHillHeight"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("minHillHeight"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("alowHillValleys"));
         EditorGUILayout.Space();
 
         EditorGUILayout.TextField("Wave parameters");
@@ -193,7 +195,7 @@ public class TerrainEditor : Editor
     {
         EditorGUILayout.TextField("River Agent parameters");
         EditorGUILayout.PropertyField(serializedObject.FindProperty("riverTokens"));
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("coastLimit"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("coastLevel"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("heightLimit"));
 
         if (GUILayout.Button("Add River"))

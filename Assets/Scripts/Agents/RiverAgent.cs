@@ -213,7 +213,7 @@ public static class RiverAgent
                         
     }
 
-    private static Point FindCentreOfHeights(Node[,] map)
+    public static Point FindCentreOfHeights(Node[,] map)
     {
         float hxSum = 0;
         float hySum = 0;
