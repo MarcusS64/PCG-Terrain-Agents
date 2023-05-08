@@ -30,6 +30,7 @@ public class IslandGenerator : MonoBehaviour
     [SerializeField] int mountainStartX;
     [SerializeField] int mountainStartY;
     [SerializeField] int mountainTokens;
+    [SerializeField] int mountainChainTokens;
     [SerializeField] int mountainTurnLimit;
     [SerializeField] int mountainProbability;
     [SerializeField] int mountainHeightWeight;
@@ -220,7 +221,7 @@ public class IslandGenerator : MonoBehaviour
     public void GenerateMountains()
     {
         //squares = MountainAgent.MountainGenerate(mountainStartX, mountainStartY, mountainTokens, squares, mountainTurnLimit);
-        squares = MountainAgent.StartMountainChain(mountainStartX, mountainStartY, mountainTokens, squares, mountainHeightWeight, coastLevel, maxNoise, useStartGiven);
+        squares = MountainAgent.StartMountainChain(mountainStartX, mountainStartY, mountainTokens, squares, mountainHeightWeight, coastLevel, maxNoise, useStartGiven, mountainChainTokens);
         terrain.terrainData.SetHeights(0, 0, GenerateHeights());
         GetComponent<AssignSplatMap>().UpdateSplatMap();
     }

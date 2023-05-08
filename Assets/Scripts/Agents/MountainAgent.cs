@@ -77,18 +77,16 @@ public static class MountainAgent
     {
         Point location = new Point(startX, startY);
         int index;
-        //int tokens = agent.GetTokens();
         for (int i = 0; i < tokens; i++)
         {
             map[location.x, location.y].SetAverageHeight(true, heightWeight);
-            //map[location.x, location.y].SetHeight(1f);
             index = Random.Range(0, map[location.x, location.y].adjacentSquares.Count);
             location.SetNew(map[location.x, location.y].adjacentSquares[index].X(), map[location.x, location.y].adjacentSquares[index].Y());
         }
         return map;
     }
 
-    public static Node[,] StartMountainChain(int startX, int startY, int tokens, Node[,] map, int heightWeight, float coastLevel, float maxNoise, bool useStartGiven) //Actually used
+    public static Node[,] StartMountainChain(int startX, int startY, int tokens, Node[,] map, int heightWeight, float coastLevel, float maxNoise, bool useStartGiven, int chainTokens) //Actually used
     {
         Point location = new Point(startX, startY);
         if (!useStartGiven)
@@ -100,11 +98,11 @@ public static class MountainAgent
         int index;
         List<Node> removeQueue = new List<Node>();
 
-        while(tokens > 0)
+        while(chainTokens > 0)
         {
-            tokens--;
+            chainTokens--;
             removeQueue.Clear();
-            for (int i = 0; i < 90; i++) //tokens
+            for (int i = 0; i < tokens; i++)
             {
                 map[location.x, location.y].SetAverageHeight(true, heightWeight);
                 index = Random.Range(0, map[location.x, location.y].adjacentSquares.Count);

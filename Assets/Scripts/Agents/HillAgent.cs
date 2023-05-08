@@ -122,13 +122,18 @@ public static class HillAgent
                 }
             }
             float newHeight = WaveFunction(start, currentTile, waveTokens, amplitudes, lambdas, phaseshifts, startingPoints);
-            if (!alowHillVallies && newHeight >= -0.5f)
+            if (alowHillVallies)
             {
-                currentTile.SetHeight(0.5f + newHeight);
+                currentTile.SetHeight(coastLimit + newHeight); 
             }
-            else
+            else if(newHeight >= 0.0f)
             {
                 currentTile.SetHeight(coastLimit + newHeight);
+            }
+
+            if(myQueue.Count <= 0)
+            {
+                break;
             }
             
             //currentTile.AddHeight(WaveFunction(start, currentTile, waveTokens, amplitudes, lambdas)); 
@@ -136,7 +141,7 @@ public static class HillAgent
             //Debug.Log("Set average height");
         }
 
-        BlendBorder(myQueue, removeQueue, waveTokens, amplitudes, lambdas, phaseshifts, startingPoints, start, coastLimit);
+        BlendBorder(myQueue, removeQueue, waveTokens, amplitudes, lambdas, phaseshifts, startingPoints, start, coastLimit, alowHillVallies);
         //SmoothBorder(myQueue, removeQueue, graph);
         //DampBorder(myQueue, removeQueue, graph, coastLimit, start);
         foreach (Node node in removeQueue)
@@ -206,7 +211,8 @@ public static class HillAgent
         Debug.Log("loop count at: " + loopCount);
     }
 
-    private static void BlendBorder(Queue<Node> myQueue, List<Node> removeQueue, int waveTokens, List<float> amplitudes, List<float> lambdas, List<float> phaseshifts, List<Node> startingPoints, Node start, float coastLimit)
+    private static void BlendBorder(Queue<Node> myQueue, List<Node> removeQueue, int waveTokens, List<float> amplitudes, 
+        List<float> lambdas, List<float> phaseshifts, List<Node> startingPoints, Node start, float coastLimit, bool allowHillValleys)
     {
         int loopCount = 4000;
 
@@ -224,7 +230,14 @@ public static class HillAgent
             }
             //Debug.Log("First new amplitude: " + newAmplitudes[0]);
             float newHeight = WaveFunction(currentNode, currentNode, waveTokens, newAmplitudes, lambdas, phaseshifts, startingPoints);
-            currentNode.SetHeight(coastLimit + newHeight);
+            if (allowHillValleys)
+            {
+                currentNode.SetHeight(coastLimit + newHeight);
+            }
+            else if (newHeight >= 0.0f)
+            {
+                currentNode.SetHeight(coastLimit + newHeight);
+            }
             loopCount--;
            
             if(Mathf.Abs(currentNode.GetHeight() - coastLimit) > 0.01f)
@@ -239,6 +252,11 @@ public static class HillAgent
                         removeQueue.Add(currentNode.adjacentSquares[i]);
                     }
                 }
+            }
+
+            if(myQueue.Count <= 0)
+            {
+                break;
             }
                        
         }

@@ -127,8 +127,9 @@ public class TerrainEditor : Editor
             Debug.Log("Try to Generate mountains");
         }
 
-        EditorGUILayout.TextField("Add single mountain chain");
         EditorGUILayout.Space();
+        EditorGUILayout.TextField("Add single mountain chain");        
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("mountainChainTokens"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("mountainStartX"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("mountainStartY"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("useStartGiven"));

@@ -9,7 +9,7 @@ public class MarkerMovement : MonoBehaviour
     void Start()
     {
         gameObject.transform.position = new Vector3(myTerrain.GetComponent<IslandGenerator>().hillStartX, transform.position.y, myTerrain.GetComponent<IslandGenerator>().hillStartY);
-        Debug.Log("Merker moved to: " + myTerrain.GetComponent<IslandGenerator>().hillStartX + " | " + myTerrain.GetComponent<IslandGenerator>().hillStartY);
+        Debug.Log("Marker moved to: " + myTerrain.GetComponent<IslandGenerator>().hillStartX + " | " + myTerrain.GetComponent<IslandGenerator>().hillStartY);
     }
 
     // Update is called once per frame
@@ -31,6 +31,6 @@ public class MarkerMovement : MonoBehaviour
     public void MoveMarker()
     {
         Debug.Log("Merker moved");
-        transform.position = new Vector3(myTerrain.GetComponent<IslandGenerator>().hillStartX, transform.position.y, myTerrain.GetComponent<IslandGenerator>().hillStartY);
+        transform.position = new Vector3(myTerrain.GetComponent<IslandGenerator>().hillStartY, transform.position.y, myTerrain.GetComponent<IslandGenerator>().hillStartX);
     }
 }
