@@ -206,7 +206,7 @@ public class IslandGenerator : MonoBehaviour
             for (int j = 0; j < height; j++)
             {
                 
-                if(squares[i, j].SameSorroundingElevation(5, maxNoise) && squares[i, j].GetHeight() >= coastLevel)
+                if(squares[i, j].GetHeight() >= coastLevel) //squares[i, j].SameSorroundingElevation(5, maxNoise) && 
                 {
                     if(UnityEngine.Random.Range(0, 100) > mountainProbability)
                         squares = MountainAgent.RiseMountains(i, j, mountainTokens, squares, mountainHeightWeight);

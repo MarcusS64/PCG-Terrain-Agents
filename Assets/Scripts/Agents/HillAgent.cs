@@ -141,7 +141,10 @@ public static class HillAgent
             //Debug.Log("Set average height");
         }
 
-        BlendBorder(myQueue, removeQueue, waveTokens, amplitudes, lambdas, phaseshifts, startingPoints, start, coastLimit, alowHillVallies);
+        if(myQueue.Count > 0)
+        {
+            BlendBorder(myQueue, removeQueue, waveTokens, amplitudes, lambdas, phaseshifts, startingPoints, start, coastLimit, alowHillVallies);
+        }
         //SmoothBorder(myQueue, removeQueue, graph);
         //DampBorder(myQueue, removeQueue, graph, coastLimit, start);
         foreach (Node node in removeQueue)

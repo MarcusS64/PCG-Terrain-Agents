@@ -909,12 +909,12 @@ MonoBehaviour:
   beachTokens: 100
   hillStartX: 128
   hillStartY: 128
-  hillTokens: 100
+  hillTokens: 200
   maxHillHeight: 0.055
-  minHillHeight: 0.05
+  minHillHeight: 0.045
   maxlambda: 20
   minlambda: 10
-  numberOfWaves: 2
+  numberOfWaves: 4
   maxPhaseShift: 0.5
   minPhaseShift: -0.5
   riverTokens: 100
@@ -1681,7 +1681,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1328119248}
-  m_LocalRotation: {x: 0.3600211, y: 0.000000022701792, z: -0.000000008760571, w: 0.9329442}
+  m_LocalRotation: {x: 0.3600211, y: -0.000000022701792, z: 0.000000008760571, w: 0.9329442}
   m_LocalPosition: {x: -128, y: 66.9, z: -212.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
