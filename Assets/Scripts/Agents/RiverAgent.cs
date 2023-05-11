@@ -119,7 +119,7 @@ public static class RiverAgent
                 if (!isTaboo) //&& currentDistance > nodeDistanceToGoal
                 {
                     //nodesCloseToGoal.Add(i, currentNode.adjacentSquares[i]);
-                    nodeWeights.Add(i, 2 * currentDistance / nodeDistanceToGoal);
+                    nodeWeights.Add(i, 2 * (currentDistance / nodeDistanceToGoal));
                 }
                 isTaboo = false;
             }

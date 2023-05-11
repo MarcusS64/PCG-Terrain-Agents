@@ -125,16 +125,19 @@ public static class MountainAgent
                     break;
                 }
 
-                foreach (Node tile in currentTile.adjacentSquares)
+                int startIndex = Random.Range(0, currentTile.adjacentSquares.Count);
+                for(int i = 0; i< currentTile.adjacentSquares.Count; i++)
                 {
-                    if (tile.queued)
+                    startIndex++;
+                    startIndex %= currentTile.adjacentSquares.Count;
+                    if (currentTile.adjacentSquares[startIndex].queued)
                     {
                         continue;
                     }
-                    if (tile.GetHeight() >= 0.5f)
+                    if (currentTile.adjacentSquares[startIndex].GetHeight() >= 0.5f)
                     {
                         //tile.SetParent(currentTile);
-                        myStack.Push(tile);
+                        myStack.Push(currentTile.adjacentSquares[startIndex]);
                     }
                 }
                 breakPoint++;
