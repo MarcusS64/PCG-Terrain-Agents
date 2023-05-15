@@ -34,6 +34,7 @@ public class IslandGenerator : MonoBehaviour
     [SerializeField] int mountainTurnLimit;
     [SerializeField] int mountainProbability;
     [SerializeField] int mountainHeightWeight;
+    [SerializeField] int RadiusCheckLimit;
     [SerializeField] bool alowHillValleys = true;
     [SerializeField] int beachStartX;
     [SerializeField] int beachStartY;
@@ -206,7 +207,7 @@ public class IslandGenerator : MonoBehaviour
             for (int j = 0; j < height; j++)
             {
                 
-                if(squares[i, j].GetHeight() >= coastLevel) //squares[i, j].SameSorroundingElevation(5, maxNoise) && 
+                if(squares[i, j].SameSorroundingElevation(RadiusCheckLimit, maxNoise) && squares[i, j].GetHeight() >= coastLevel) //squares[i, j].SameSorroundingElevation(RadiusCheckLimit, maxNoise) && 
                 {
                     if(UnityEngine.Random.Range(0, 100) > mountainProbability)
                         squares = MountainAgent.RiseMountains(i, j, mountainTokens, squares, mountainHeightWeight);
@@ -221,7 +222,7 @@ public class IslandGenerator : MonoBehaviour
     public void GenerateMountains()
     {
         //squares = MountainAgent.MountainGenerate(mountainStartX, mountainStartY, mountainTokens, squares, mountainTurnLimit);
-        squares = MountainAgent.StartMountainChain(mountainStartX, mountainStartY, mountainTokens, squares, mountainHeightWeight, coastLevel, maxNoise, useStartGiven, mountainChainTokens);
+        squares = MountainAgent.StartMountainChain(mountainStartX, mountainStartY, mountainTokens, squares, mountainHeightWeight, coastLevel, maxNoise, useStartGiven, mountainChainTokens, RadiusCheckLimit);
         terrain.terrainData.SetHeights(0, 0, GenerateHeights());
         GetComponent<AssignSplatMap>().UpdateSplatMap();
     }

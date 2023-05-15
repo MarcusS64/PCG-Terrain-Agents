@@ -86,7 +86,8 @@ public static class MountainAgent
         return map;
     }
 
-    public static Node[,] StartMountainChain(int startX, int startY, int tokens, Node[,] map, int heightWeight, float coastLevel, float maxNoise, bool useStartGiven, int chainTokens) //Actually used
+    public static Node[,] StartMountainChain(int startX, int startY, int tokens, Node[,] map, int heightWeight,
+        float coastLevel, float maxNoise, bool useStartGiven, int chainTokens, int radiusCheckLimit) //Actually used
     {
         Point location = new Point(startX, startY);
         if (!useStartGiven)
@@ -118,7 +119,7 @@ public static class MountainAgent
                 Node currentTile = myStack.Pop();
                 currentTile.queued = true;
                 removeQueue.Add(currentTile);
-                if (currentTile.GetHeight() <= coastLevel + 0.1f + maxNoise && currentTile.SameSorroundingElevation(5, maxNoise)) 
+                if (currentTile.GetHeight() <= coastLevel + 0.1f + maxNoise && currentTile.SameSorroundingElevation(radiusCheckLimit, maxNoise)) 
                 {
                     location.SetNew(currentTile.X(), currentTile.Y());
                     //RetracePath(start, goal);

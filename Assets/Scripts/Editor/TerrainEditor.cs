@@ -118,6 +118,7 @@ public class TerrainEditor : Editor
         EditorGUILayout.TextField("Mountain Agent parameters");
         EditorGUILayout.PropertyField(serializedObject.FindProperty("mountainTokens"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("mountainHeightWeight"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("RadiusCheckLimit"));
         EditorGUILayout.Space();
         EditorGUILayout.TextField("Generate mountains over whole coast");
         EditorGUILayout.PropertyField(serializedObject.FindProperty("mountainProbability"));
