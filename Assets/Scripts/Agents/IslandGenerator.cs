@@ -7,12 +7,19 @@ using System;
 public enum AgentType { Coast, SmoothCoast, Mountain, Beach }
 public class IslandGenerator : MonoBehaviour
 {
+    [Range(0, 20)]
     public int depth = 20; //Only used in one place and might be omitted
+    [Range(10, 512)]
     public int width = 256;
+    [Range(10, 512)]
     public int height = 256;
+    [Range(0, 20)]
     public float scale = 20f; //Not used but could set the scale for the map
+    [Range(0.0f, 0.5f)]
     [SerializeField] float coastLevel;
+    [Range(0.0f, 0.2f)]
     [SerializeField] float maxNoise = 0.01f;
+    [Range(-0.2f, 0.0f)]
     [SerializeField] float minNoise = - 0.01f;
     [SerializeField] bool vonNeumanNeighbourhood = true;
 
@@ -20,20 +27,32 @@ public class IslandGenerator : MonoBehaviour
     public static (int x, int y)[] coords = new (int, int)[] { (-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1) };
     public static (int x, int y)[] NeumanCoords = new (int, int)[] { (-1, 0), (0, -1), (0, 1), (1, 0) };
     Agent agent;
+    [Range(10, 20000)]
     [SerializeField] int startTokens;
+    [Range(0, 256)]
     [SerializeField] int startX;
+    [Range(0, 256)]
     [SerializeField] int startY;
+    [Range(1, 20)]
     [SerializeField] int childTokenLimit = 8;
+    [Range(2, 2)]
     [SerializeField] int numberOfChildren = 2;
+    [Range(0, 8)]
     [SerializeField] int smoothTokens;
     [SerializeField] bool useStartGiven = true;
+    [Range(0, 256)]
     [SerializeField] int mountainStartX;
+    [Range(0, 256)]
     [SerializeField] int mountainStartY;
+    [Range(0, 256)]
     [SerializeField] int mountainTokens;
+    [Range(1, 200)]
     [SerializeField] int mountainChainTokens;
-    [SerializeField] int mountainTurnLimit;
+    [Range(1, 99)]
     [SerializeField] int mountainProbability;
+    [Range(1, 5)]
     [SerializeField] int mountainHeightWeight;
+    [Range(0, 5)]
     [SerializeField] int RadiusCheckLimit;
     [SerializeField] bool alowHillValleys = true;
     [SerializeField] int beachStartX;
@@ -41,20 +60,32 @@ public class IslandGenerator : MonoBehaviour
     [SerializeField] int beachTokens;
     [SerializeField]
     [OnChangedCall("onSerializedPropertyChange")]
+    [Range(0, 256)]
     public int hillStartX = 100;
     [SerializeField]
-    [OnChangedCall("onSerializedPropertyChange")] 
+    [OnChangedCall("onSerializedPropertyChange")]
+    [Range(0, 256)]
     public int hillStartY = 100;
+    [Range(1, 100)]
     [SerializeField] int hillTokens = 10;
+    [Range(0.0f, 1.0f)]
     [SerializeField] float maxHillHeight = 0.8f;
+    [Range(0.0f, 1.0f)]
     [SerializeField] float minHillHeight = 0.6f;
+    [Range(0.0f, 100.0f)]
     [SerializeField] float maxlambda = 20.0f;
+    [Range(0.0f, 100.0f)]
     [SerializeField] float minlambda = 10.0f;
-    [Tooltip("Health value between 0 and 100.")]
+    //[Tooltip("Health value between 0 and 100.")]
+    [Range(1, 5)]
     [SerializeField] int numberOfWaves = 2;
+    [Range(0.0f, 1.0f)]
     [SerializeField] float maxPhaseShift = 0.5f;
+    [Range(-1.0f, 0.0f)]
     [SerializeField] float minPhaseShift = -0.5f;
+    [Range(1, 200)]
     [SerializeField] int riverTokens = 10;
+    [Range(0.0f, 1.0f)]
     [SerializeField] float heightLimit = 0.6f;
 
     Terrain terrain;
