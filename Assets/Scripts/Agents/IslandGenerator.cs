@@ -105,6 +105,8 @@ public class IslandGenerator : MonoBehaviour
         }
 
         agent = new Agent();
+        startX = Mathf.Clamp(startX, 0, width - 1);
+        startY = Mathf.Clamp(startY, 0, height - 1);
         var nodes = GetRandomNode(squares[startX, startY]);
         squares[startX, startY].visited = true;
         squares[startX, startY].AddHeight(coastLevel); //, "start"
@@ -253,6 +255,8 @@ public class IslandGenerator : MonoBehaviour
     public void GenerateMountains()
     {
         //squares = MountainAgent.MountainGenerate(mountainStartX, mountainStartY, mountainTokens, squares, mountainTurnLimit);
+        mountainStartX = Mathf.Clamp(mountainStartX, 0, width - 1);
+        mountainStartY = Mathf.Clamp(mountainStartY, 0, height - 1);
         squares = MountainAgent.StartMountainChain(mountainStartX, mountainStartY, mountainTokens, squares, mountainHeightWeight, coastLevel, maxNoise, useStartGiven, mountainChainTokens, RadiusCheckLimit);
         terrain.terrainData.SetHeights(0, 0, GenerateHeights());
         GetComponent<AssignSplatMap>().UpdateSplatMap();
@@ -268,6 +272,8 @@ public class IslandGenerator : MonoBehaviour
     public void BuildHills()
     {
         //squares = HillAgent.PerlinHills(hillStartX, hillStartY, squares, hillAreaWidth, hillAreaLength, scale);
+        hillStartX = Mathf.Clamp(hillStartX, 0, width - 1);
+        hillStartY = Mathf.Clamp(hillStartY, 0, height - 1);
         squares = HillAgent.GenerateHills(hillStartX, hillStartY, squares, maxHillHeight, minHillHeight, hillTokens, maxlambda, minlambda, numberOfWaves, maxPhaseShift, minPhaseShift, coastLevel, alowHillValleys);
         terrain.terrainData.SetHeights(0, 0, GenerateHeights());
         GetComponent<AssignSplatMap>().UpdateSplatMap();
