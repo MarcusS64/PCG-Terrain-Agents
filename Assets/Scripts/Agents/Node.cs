@@ -142,11 +142,19 @@ public class Node
             Debug.Log("Higher than 0.5f");
         }
         height += newHeight;
+        if(height > 1.0f)
+        {
+            height = 1.0f;
+        }
     }
 
     public void SetHeight(float newHeight)
     {
         height = newHeight;
+        if(height > 1.0f)
+        {
+            height = 1.0f;
+        }
     }
 
     public bool Sorrounded()

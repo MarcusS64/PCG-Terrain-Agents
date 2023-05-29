@@ -15,7 +15,7 @@ public class IslandGenerator : MonoBehaviour
     public int height = 256;
     [Range(0, 20)]
     public float scale = 20f; //Not used but could set the scale for the map
-    [Range(0.0f, 0.5f)]
+    [Range(0.0f, 0.9f)]
     [SerializeField] float coastLevel;
     [Range(0.0f, 0.2f)]
     [SerializeField] float maxNoise = 0.01f;
@@ -46,11 +46,11 @@ public class IslandGenerator : MonoBehaviour
     [SerializeField] int mountainStartY;
     [Range(0, 256)]
     [SerializeField] int mountainTokens;
-    [Range(1, 200)]
+    [Range(1, 10)]
     [SerializeField] int mountainChainTokens;
     [Range(1, 99)]
     [SerializeField] int mountainProbability;
-    [Range(1, 5)]
+    [Range(1, 9)]
     [SerializeField] int mountainHeightWeight;
     [Range(0, 5)]
     [SerializeField] int RadiusCheckLimit;
@@ -68,9 +68,9 @@ public class IslandGenerator : MonoBehaviour
     public int hillStartY = 100;
     [Range(1, 100)]
     [SerializeField] int hillTokens = 10;
-    [Range(0.0f, 1.0f)]
+    [Range(0.0f, 0.8f)]
     [SerializeField] float maxHillHeight = 0.8f;
-    [Range(0.0f, 1.0f)]
+    [Range(0.0f, 0.8f)]
     [SerializeField] float minHillHeight = 0.6f;
     [Range(0.0f, 100.0f)]
     [SerializeField] float maxlambda = 20.0f;

@@ -900,7 +900,6 @@ MonoBehaviour:
   mountainStartY: 128
   mountainTokens: 90
   mountainChainTokens: 5
-  mountainTurnLimit: 8
   mountainProbability: 70
   mountainHeightWeight: 4
   RadiusCheckLimit: 5
@@ -1260,8 +1259,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.3600211, y: 0.000000022701792, z: -0.000000008760571, w: 0.9329442}
-  m_LocalPosition: {x: 0, y: 76.9, z: -84.8}
+  m_LocalRotation: {x: 0.49560246, y: -0.5043597, z: 0.49563292, w: 0.5043287}
+  m_LocalPosition: {x: 128, y: 184.2, z: 128}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
