@@ -29,9 +29,9 @@ public class IslandGenerator : MonoBehaviour
     Agent agent;
     [Range(10, 20000)]
     [SerializeField] int startTokens;
-    [Range(0, 256)]
+    [Range(0, 512)]
     [SerializeField] int startX;
-    [Range(0, 256)]
+    [Range(0, 512)]
     [SerializeField] int startY;
     [Range(1, 20)]
     [SerializeField] int childTokenLimit = 8;
@@ -40,11 +40,11 @@ public class IslandGenerator : MonoBehaviour
     [Range(0, 8)]
     [SerializeField] int smoothTokens;
     [SerializeField] bool useStartGiven = true;
-    [Range(0, 256)]
+    [Range(0, 512)]
     [SerializeField] int mountainStartX;
-    [Range(0, 256)]
+    [Range(0, 512)]
     [SerializeField] int mountainStartY;
-    [Range(0, 256)]
+    [Range(0, 512)]
     [SerializeField] int mountainTokens;
     [Range(1, 10)]
     [SerializeField] int mountainChainTokens;
@@ -60,11 +60,11 @@ public class IslandGenerator : MonoBehaviour
     [SerializeField] int beachTokens;
     [SerializeField]
     [OnChangedCall("onSerializedPropertyChange")]
-    [Range(0, 256)]
+    [Range(0, 512)]
     public int hillStartX = 100;
     [SerializeField]
     [OnChangedCall("onSerializedPropertyChange")]
-    [Range(0, 256)]
+    [Range(0, 512)]
     public int hillStartY = 100;
     [Range(1, 100)]
     [SerializeField] int hillTokens = 10;
